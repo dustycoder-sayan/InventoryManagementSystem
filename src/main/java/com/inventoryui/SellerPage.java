@@ -135,6 +135,9 @@ public class SellerPage extends Application {
                 TableView<AllSellerSales> table1 = allSellerSales();
                 layout.setCenter(table1);
             }
+            else if(valueSelected.equals("Sell")) {
+                SellProduct.start();
+            }
 //            else if(valueSelected.equals("Logout")) {
 //                new Logout(stage, new LoginPage().loginScene(), adminScene(stage)).al;
 //            }
@@ -310,5 +313,4 @@ public class SellerPage extends Application {
     public ObservableList<AllSellerSales> allSellerSalesFunction() {
         return FXCollections.observableArrayList(new Seller(conn, username).getAllSellerSales());
     }
-
 }
