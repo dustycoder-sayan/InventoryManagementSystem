@@ -22,7 +22,7 @@ public class Admin implements DatabaseConstants {
     }
 
     public String getAdminFirstName() {
-        final String GET_FIRST_NAME = "SELECT U_NAME FROM USERS WHERE U_USERNAME=?";
+        final String GET_FIRST_NAME = "SELECT U_NAME FROM USERS WHERE USERNAME=?";
         try {
             PreparedStatement getFirstName = conn.prepareStatement(GET_FIRST_NAME);
             getFirstName.setString(1, username);
@@ -35,7 +35,7 @@ public class Admin implements DatabaseConstants {
     }
 
     public String getAdminFullName() {
-        final String GET_FIRST_NAME = "SELECT U_NAME FROM USERS WHERE U_USERNAME=?";
+        final String GET_FIRST_NAME = "SELECT U_NAME FROM USERS WHERE USERNAME=?";
         try {
             PreparedStatement getFirstName = conn.prepareStatement(GET_FIRST_NAME);
             getFirstName.setString(1, username);
@@ -123,30 +123,34 @@ public class Admin implements DatabaseConstants {
             user.setUserName(userName);
             Random random = new Random();
 
-            String usernameNew = userName.toLowerCase().substring(0,3)+userLocation.toLowerCase().substring(0,3)
-                    +"."+category.toLowerCase()+String.format("%04d", random.nextInt(10000));
-            String password = userName.toLowerCase().substring(0,4)+"01234";
+            if(category.equalsIgnoreCase("Admin") || category.equalsIgnoreCase("Seller")) {
+                String usernameNew = userName.toLowerCase().substring(0,3)+userLocation.toLowerCase().substring(0,3)
+                        +"."+category.toLowerCase()+String.format("%04d", random.nextInt(10000));
+                String password = userName.toLowerCase().substring(0,4)+"01234";
 
-            user.setUsername(usernameNew);
-            user.setPassword(password);
-            user.setUserPhone(userPhone);
-            user.setUserLocation(userLocation);
-            user.setCategory(category);
+                user.setUsername(usernameNew);
+                user.setPassword(password);
+                user.setUserPhone(userPhone);
+                user.setUserLocation(userLocation);
+                user.setCategory(category);
 
-            int userId = new UsersDAO(conn).addUser(user);
-            if(userId == -1)
-                throw new Exception("Error");
-            return userId;
+                int userId = new UsersDAO(conn).addUser(user);
+                if(userId == -1)
+                    throw new Exception("Error");
+                return userId;
+            } else {
+                throw new SQLException("Error");
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return -1;
         }
     }
 
-    public boolean updateAnotherUser(String username, String uPhone, String location, String category) {
+    public boolean updateAnotherUser(int userId, String uPhone, String location, String category) {
         try {
             UsersDTO user = new UsersDTO();
-            user.setUsername(username);
+            user.setUserId(userId);
             user.setUserPhone(uPhone);
             user.setUserLocation(location);
             user.setCategory(category);
@@ -161,12 +165,17 @@ public class Admin implements DatabaseConstants {
         }
     }
 
-    public boolean deleteUser(String username) {
+    public boolean deleteUser(int uId) {
+        final String GET_USERNAME = "SELECT USERNAME FROM "+USERS_TABLE+" WHERE U_ID=?";
         final String DELETE_USER = "DELETE FROM "+USERS_TABLE+" WHERE "+USERS_USERNAME+"=?";
         try {
+            PreparedStatement getUsername = conn.prepareStatement(GET_USERNAME);
+            getUsername.setInt(1, uId);
+            ResultSet resultSet = getUsername.executeQuery();
+            if(!resultSet.next())
+                throw new SQLException("No Such User found");
+            String username = resultSet.getString(1);
             PreparedStatement delete = conn.prepareStatement(DELETE_USER);
-            if(!new UsersDAO(conn).userExists(username))
-                throw new Exception("User not Found");
             delete.setString(1, username);
             int affectedRows = delete.executeUpdate();
             if(affectedRows != 1)
@@ -430,10 +439,10 @@ public class Admin implements DatabaseConstants {
 
     // Get the maximum product stock that has been sold
     public List<ProductsDTO> maxProductSold() {
-        final String MAX_PROD_SOLD = "SELECT P.P_ID, P."+PRODUCTS_NAME+",P."+PRODUCTS_BRAND+",COUNT(IP.P_ID) FROM "+PRODUCTS_TABLE+" P,"
+        final String MAX_PROD_SOLD = "SELECT P.P_ID, P."+PRODUCTS_NAME+",P."+PRODUCTS_BRAND+",SUM(IP.QUANTITY) FROM "+PRODUCTS_TABLE+" P,"
                 +SUPPLIERS_TABLE+" S,"+ISSUE_PRODUCT_TABLE+" IP WHERE P."+PRODUCTS_S_ID+"=S."+SUPPLIERS_ID
-                +" AND IP."+ISSUE_P_ID+"=P."+PRODUCTS_ID+" GROUP BY IP."+ISSUE_P_ID+",P."+PRODUCTS_S_ID
-                +" ORDER BY COUNT(IP."+ISSUE_P_ID+") DESC";
+                +" AND IP."+ISSUE_P_ID+"=P."+PRODUCTS_ID+" GROUP BY IP."+ISSUE_P_ID
+                +" ORDER BY SUM(IP.QUANTITY) DESC";
         try {
             PreparedStatement maxProdSold = conn.prepareStatement(MAX_PROD_SOLD);
             ResultSet results = maxProdSold.executeQuery();
@@ -509,6 +518,43 @@ public class Admin implements DatabaseConstants {
         } catch(Exception e) {
             System.out.println(e.getMessage());
             return null;
+        }
+    }
+
+    public boolean deleteProduct(String prodName, String prodBrand, String supplierName, String supplierPhone) {
+        final String DELETE_PRODUCT = "DELETE FROM "+PRODUCTS_TABLE+" WHERE P_ID=?";
+        try {
+            int sId = new SuppliersDAO(conn).getSupplierId(supplierName, supplierPhone);
+            int pId = new ProductsDAO(conn).getProductId(prodName, prodBrand, sId);
+
+            PreparedStatement deleteProd = conn.prepareStatement(DELETE_PRODUCT);
+            deleteProd.setInt(1, pId);
+            int affectedRows = deleteProd.executeUpdate();
+            if(affectedRows != 1)
+                throw new SQLException("More than one row affected");
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean deleteSupplier(String supName, String supNumber) {
+        final String DELETE_SUPPLIER = "DELETE FROM "+SUPPLIERS_TABLE+" WHERE S_ID=?";
+        try {
+            boolean exists = new SuppliersDAO(conn).supplierExists(supName, supNumber);
+            if(!exists)
+                throw new SQLException("No Such Supplier");
+            int sId = new SuppliersDAO(conn).getSupplierId(supName, supNumber);
+            PreparedStatement delSup = conn.prepareStatement(DELETE_SUPPLIER);
+            delSup.setInt(1, sId);
+            int affRows = delSup.executeUpdate();
+            if(affRows != 1)
+                throw new SQLException("More than one row affected");
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
         }
     }
 }

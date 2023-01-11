@@ -52,7 +52,7 @@ public class Analyst implements DatabaseConstants {
     }
 
     public List<AllSellerSales> getAllSellerSales() {
-        final String ALL_SELLER_SALES = "SELECT U."+USERS_NAME+", SUM(IP."+ISSUE_QUANTITY+"*P."+PRODUCTS_SELLING_PRICE
+        final String ALL_SELLER_SALES = "SELECT U.U_ID, U."+USERS_NAME+", SUM(IP."+ISSUE_QUANTITY+"*P."+PRODUCTS_SELLING_PRICE
                 +") FROM "+USERS_TABLE+" U,"
                 +ISSUE_PRODUCT_TABLE+" IP,"+PRODUCTS_TABLE+" P  WHERE U."+USERS_ID+"=IP."+ISSUE_U_ID+" AND IP."+PRODUCTS_ID
                 +"=P."+PRODUCTS_ID+" GROUP BY IP."+USERS_ID;
@@ -61,7 +61,7 @@ public class Analyst implements DatabaseConstants {
             ResultSet results = allSellerSales.executeQuery();
             List<AllSellerSales> allSellers = new ArrayList<>();
             while(results.next()) {
-                AllSellerSales allSeller = new AllSellerSales(results.getString(1), results.getInt(2));
+                AllSellerSales allSeller = new AllSellerSales(results.getInt(1), results.getString(2), results.getInt(3));
                 allSellers.add(allSeller);
             }
             return allSellers;

@@ -90,7 +90,7 @@ public class Seller implements DatabaseConstants {
 
     // View his Own Sales grouped by customer and date_sold ordered by customer and max sales
     public List<SellerOwnSales> totalSalesbyCustomerAndProduct() {
-        final String VIEW_SALES = "SELECT C."+CUSTOMER_NAME+",C."+CUSTOMER_LOCATION+",P."+PRODUCTS_NAME+",P."
+        final String VIEW_SALES = "SELECT    C."+CUSTOMER_NAME+",C."+CUSTOMER_LOCATION+",P."+PRODUCTS_NAME+",P."
                 +PRODUCTS_BRAND+",IP."+ISSUE_QUANTITY+",IP."+ISSUE_DATE_SOLD+",P."+PRODUCTS_SELLING_PRICE+"* IP."
                 +ISSUE_QUANTITY+" FROM "+CUSTOMER_TABLE+" C,"+ISSUE_PRODUCT_TABLE+" IP,"+PRODUCTS_TABLE+" P WHERE C."+
                 CUSTOMER_ID+"=IP."+ISSUE_C_ID+" AND IP."+ISSUE_P_ID+"=P."+PRODUCTS_ID+" AND IP."+ISSUE_U_ID+"=? ORDER BY "
@@ -115,7 +115,7 @@ public class Seller implements DatabaseConstants {
 
     // View Sales of All the Sellers
     public List<AllSellerSales> getAllSellerSales() {
-        final String ALL_SELLER_SALES = "SELECT U."+USERS_NAME+", SUM(IP."+ISSUE_QUANTITY+"*P."+PRODUCTS_SELLING_PRICE
+        final String ALL_SELLER_SALES = "SELECT U.U_ID, U."+USERS_NAME+", SUM(IP."+ISSUE_QUANTITY+"*P."+PRODUCTS_SELLING_PRICE
         +") FROM "+USERS_TABLE+" U,"
                 +ISSUE_PRODUCT_TABLE+" IP,"+PRODUCTS_TABLE+" P  WHERE U."+USERS_ID+"=IP."+ISSUE_U_ID+" AND IP."+PRODUCTS_ID
         +"=P."+PRODUCTS_ID+" GROUP BY IP."+USERS_ID+" ORDER BY "+" SUM(IP."+ISSUE_QUANTITY+"*P."+PRODUCTS_SELLING_PRICE
@@ -125,7 +125,7 @@ public class Seller implements DatabaseConstants {
             ResultSet results = allSellerSales.executeQuery();
             List<AllSellerSales> allSellers = new ArrayList<>();
             while(results.next()) {
-                AllSellerSales allSeller = new AllSellerSales(results.getString(1), results.getInt(2));
+                AllSellerSales allSeller = new AllSellerSales(results.getInt(1), results.getString(2), results.getInt(3));
                 allSellers.add(allSeller);
             }
             return allSellers;
@@ -192,7 +192,7 @@ public class Seller implements DatabaseConstants {
 
     // Returns customer with most sales
     public List<MaxCustomer> getMaxSalesCustomer() {
-        final String MAX_CUSTOMER = "SELECT C."+CUSTOMER_NAME+", SUM(P."+PRODUCTS_SELLING_PRICE+"*IP."+ISSUE_QUANTITY
+        final String MAX_CUSTOMER = "SELECT C.C_ID, C."+CUSTOMER_NAME+", SUM(P."+PRODUCTS_SELLING_PRICE+"*IP."+ISSUE_QUANTITY
                 +") FROM "+CUSTOMER_TABLE+" C,"+PRODUCTS_TABLE+" P,"+ISSUE_PRODUCT_TABLE+" IP WHERE P."
                 +PRODUCTS_ID+"=IP."+ISSUE_P_ID+" AND IP."+ISSUE_C_ID+"=C."+CUSTOMER_ID+" AND IP."+ISSUE_U_ID
                 +"=? GROUP BY IP."+ISSUE_U_ID+",IP."+ISSUE_C_ID+" ORDER BY SUM(P."+PRODUCTS_SELLING_PRICE+"*IP."+ISSUE_QUANTITY+") DESC";
@@ -203,7 +203,7 @@ public class Seller implements DatabaseConstants {
             ResultSet results = maxCustomer.executeQuery();
             List<MaxCustomer> max = new ArrayList<>();
             while(results.next()) {
-                MaxCustomer maxCus = new MaxCustomer(results.getString(1), results.getDouble(2));
+                MaxCustomer maxCus = new MaxCustomer(results.getInt(1), results.getString(2), results.getDouble(3));
                 max.add(maxCus);
             }
             return max;
@@ -215,7 +215,7 @@ public class Seller implements DatabaseConstants {
 
     // Returns customer with most orders
     public List<MaxCustomer> getMaxOrdersCustomer() {
-        final String MAX_CUSTOMER = "SELECT C."+CUSTOMER_NAME+", COUNT(IP."+ISSUE_C_ID+") FROM "+CUSTOMER_TABLE+" C,"
+        final String MAX_CUSTOMER = "SELECT C.C_ID, C."+CUSTOMER_NAME+", COUNT(IP."+ISSUE_C_ID+") FROM "+CUSTOMER_TABLE+" C,"
                 +PRODUCTS_TABLE+" P,"+ISSUE_PRODUCT_TABLE+" IP WHERE P."
                 +PRODUCTS_ID+"=IP."+ISSUE_P_ID+" AND IP."+ISSUE_C_ID+"=C."+CUSTOMER_ID+" AND IP."+ISSUE_U_ID
                 +"=? GROUP BY IP."+ISSUE_U_ID+",IP."+ISSUE_C_ID+" ORDER BY COUNT(IP."+ISSUE_C_ID+") DESC";
@@ -226,7 +226,7 @@ public class Seller implements DatabaseConstants {
             ResultSet results = maxCustomer.executeQuery();
             List<MaxCustomer> max = new ArrayList<>();
             while(results.next()) {
-                MaxCustomer maxCus = new MaxCustomer(results.getString(1), results.getDouble(2));
+                MaxCustomer maxCus = new MaxCustomer(results.getInt(1), results.getString(2), results.getDouble(3));
                 max.add(maxCus);
             }
             return max;
@@ -237,6 +237,4 @@ public class Seller implements DatabaseConstants {
     }
 }
 
-// TODO: Sell Product and update Issue Product
 // TODO: Delete Customer function
-// TODO: Add Customer Views if time is there: Which Customer has given him maximum Sales

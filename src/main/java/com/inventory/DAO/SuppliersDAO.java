@@ -116,7 +116,7 @@ public class SuppliersDAO implements DatabaseConstants {
 
     public ResultSet getAllSupplierDetails() {
         try {
-            PreparedStatement results = conn.prepareStatement("SELECT * FROM " + SUPPLIERS_TABLE + " ORDER BY " + SUPPLIERS_NAME + " COLLATE NOCASE");
+            PreparedStatement results = conn.prepareStatement("SELECT * FROM " + SUPPLIERS_TABLE + " ORDER BY " + SUPPLIERS_ID + " COLLATE NOCASE");
             if (!results.executeQuery().next())
                 throw new SQLException("No Suppliers Exists");
             return results.executeQuery();

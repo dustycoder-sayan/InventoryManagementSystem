@@ -45,8 +45,14 @@ public class LoginPage extends Application {
     }
 
     @Override
+    public void stop() throws Exception {
+        super.stop();
+        ConnectionFactory.getInstance().close();
+    }
+
+    @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("JavaFX Welcome");
+        primaryStage.setTitle("Login to Inventory Management");
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);

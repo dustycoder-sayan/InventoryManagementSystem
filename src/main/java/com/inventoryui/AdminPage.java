@@ -17,6 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.sql.BatchUpdateException;
 import java.sql.Connection;
 
 public class AdminPage extends Application {
@@ -28,7 +29,7 @@ public class AdminPage extends Application {
     private TextField productName, brandName;
 
     public void start(Stage stage) throws Exception {
-        stage.setTitle("Welcome, Admin!");
+        stage.setTitle("Welcome, Admin!");  // todo: put admin name
         BorderPane layout = new BorderPane();
 
         // Top Part
@@ -54,20 +55,20 @@ public class AdminPage extends Application {
         products = makeBranch("Products", root);
         makeBranch("Add New Product", products);
         makeBranch("Update Stock", products);
+        makeBranch("Delete Product", products);
         makeBranch("View All Products", products);
         makeBranch("Products Most Sold", products);
-        makeBranch("Delete Product", products);
 
         suppliers = makeBranch("Suppliers", root);
         makeBranch("Add New Supplier", suppliers);
         makeBranch("Update Supplier", suppliers);
-        makeBranch("View All Suppliers", suppliers);
         makeBranch("Delete Supplier", suppliers);
+        makeBranch("View All Suppliers", suppliers);
 
         users = makeBranch("Employees", root);
-        makeBranch("Add New Employees", users);
-        makeBranch("Update Employees", users);
-        makeBranch("Delete Employees", users);
+        makeBranch("Add New Employee", users);
+        makeBranch("Update Employee", users);
+        makeBranch("Delete Employee", users);
         makeBranch("View All Employees", users);
         makeBranch("Most Sold", users);
 
@@ -163,10 +164,38 @@ public class AdminPage extends Application {
                 TableView<UsersDTO> table1 = maxSaleUser();
                 layout.setCenter(table1);
             }
+            else if(valueSelected.equals("Add New Product")) {
+                AddProducts.start();
+            }
+            else if(valueSelected.equals("Update Stock")) {
+                UpdateStock.start();
+            }
+            else if(valueSelected.equals("Delete Product")) {
+                DeleteProduct.start();
+            }
+            else if(valueSelected.equals("Add New Supplier")) {
+                AddSupplier.start();
+            }
+            else if(valueSelected.equals("Update Supplier")) {
+                UpdateSupplier.start();
+            }
+            else if(valueSelected.equals("Delete Supplier")) {
+                DeleteSupplier.start();
+            }
+            else if(valueSelected.equals("Add New Employee")) {
+                AddUser.start();
+            }
+            else if(valueSelected.equals("Update Employee")) {
+                UpdateUser.start();
+            }
+            else if(valueSelected.equals("Delete Employee")) {
+                DeleteUser.start();
+            }
 //            else if(valueSelected.equals("Logout")) {
 //                new Logout(stage, new LoginPage().loginScene(), adminScene(stage)).al;
 //            }
         } );
+
 
         Scene scene = new Scene(layout, 1250, 825);
         stage.setScene(scene);
@@ -421,37 +450,42 @@ public class AdminPage extends Application {
     public TableView<UsersDTO> viewAllUsers() {
         TableColumn<UsersDTO, Integer> userId = new TableColumn<>("Employee ID");
         userId.setCellValueFactory(new PropertyValueFactory<>("userId"));
-        userId.setMinWidth(155);
+        userId.setMinWidth(157);
         userId.setStyle( "-fx-alignment: CENTER;");
 
         TableColumn<UsersDTO, String> username = new TableColumn<>("username");
         username.setCellValueFactory(new PropertyValueFactory<>("username"));
-        username.setMinWidth(155);
+        username.setMinWidth(157);
         username.setStyle( "-fx-alignment: CENTER;");
+
+        TableColumn<UsersDTO, String> password = new TableColumn<>("password");
+        password.setCellValueFactory(new PropertyValueFactory<>("password"));
+        password.setMinWidth(157);
+        password.setStyle( "-fx-alignment: CENTER;");
 
         TableColumn<UsersDTO, String> userName = new TableColumn<>("Name");
         userName.setCellValueFactory(new PropertyValueFactory<>("userName"));
-        userName.setMinWidth(155);
+        userName.setMinWidth(157);
         userName.setStyle( "-fx-alignment: CENTER;");
 
         TableColumn<UsersDTO, String> userPhone = new TableColumn<>("Contact No");
         userPhone.setCellValueFactory(new PropertyValueFactory<>("userPhone"));
-        userPhone.setMinWidth(155);
+        userPhone.setMinWidth(157);
         userPhone.setStyle( "-fx-alignment: CENTER;");
 
         TableColumn<UsersDTO, String> userLocation = new TableColumn<>("Location");
         userLocation.setCellValueFactory(new PropertyValueFactory<>("userLocation"));
-        userLocation.setMinWidth(155);
+        userLocation.setMinWidth(157);
         userLocation.setStyle( "-fx-alignment: CENTER;");
 
         TableColumn<UsersDTO, String> category = new TableColumn<>("Category");
         category.setCellValueFactory(new PropertyValueFactory<>("category"));
-        category.setMinWidth(170);
+        category.setMinWidth(157);
         category.setStyle( "-fx-alignment: CENTER;");
 
         TableView<UsersDTO> table1 = new TableView<>();
         table1.setItems(allUsers());
-        table1.getColumns().addAll(userId, category, username, userName, userPhone, userLocation);
+        table1.getColumns().addAll(userId, category, username, password, userName, userPhone, userLocation);
 
         return table1;
     }

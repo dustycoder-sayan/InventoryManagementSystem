@@ -1,7 +1,7 @@
 package com.inventory.DTO;
 
 public class SellerOwnSales {
-    private String cName, cLocation, pName, pBrand, pQuantity, dateSold;
+    private String customerName, customerLocation, productName, productBrand, productQuantity, dateSold;
     private double totalBuyingCost;
 
     public SellerOwnSales() {
@@ -10,11 +10,11 @@ public class SellerOwnSales {
 
     public SellerOwnSales(String cName, String cLocation, String pName, String pBrand, String pQuantity, String dateSold,
                           double totalBuyingCost) {
-        this.cName = cName;
-        this.cLocation = cLocation;
-        this.pName = pName;
-        this.pBrand = pBrand;
-        this.pQuantity = pQuantity;
+        this.customerName = cName;
+        this.customerLocation = cLocation;
+        this.productName = pName;
+        this.productBrand = pBrand;
+        this.productQuantity = pQuantity;
         this.dateSold = dateSold;
         this.totalBuyingCost = totalBuyingCost;
     }
@@ -27,48 +27,48 @@ public class SellerOwnSales {
         this.totalBuyingCost = totalBuyingCost;
     }
 
-    public void setcName(String cName) {
-        this.cName = cName;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
-    public void setcLocation(String cLocation) {
-        this.cLocation = cLocation;
+    public void setCustomerLocation(String customerLocation) {
+        this.customerLocation = customerLocation;
     }
 
-    public void setpName(String pName) {
-        this.pName = pName;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
-    public void setpBrand(String pBrand) {
-        this.pBrand = pBrand;
+    public void setProductBrand(String productBrand) {
+        this.productBrand = productBrand;
     }
 
-    public void setpQuantity(String pQuantity) {
-        this.pQuantity = pQuantity;
+    public void setProductQuantity(String productQuantity) {
+        this.productQuantity = productQuantity;
     }
 
     public void setDateSold(String dateSold) {
         this.dateSold = dateSold;
     }
 
-    public String getcName() {
-        return cName;
+    public String getCustomerName() {
+        return customerName;
     }
 
-    public String getcLocation() {
-        return cLocation;
+    public String getCustomerLocation() {
+        return customerLocation;
     }
 
-    public String getpName() {
-        return pName;
+    public String getProductName() {
+        return productName;
     }
 
-    public String getpBrand() {
-        return pBrand;
+    public String getProductBrand() {
+        return productBrand;
     }
 
-    public String getpQuantity() {
-        return pQuantity;
+    public String getProductQuantity() {
+        return productQuantity;
     }
 
     public String getDateSold() {
