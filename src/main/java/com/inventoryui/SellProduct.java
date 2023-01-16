@@ -27,14 +27,15 @@ import java.sql.SQLException;
 
 public class SellProduct {
     // TODO: This program has to use main connection to get username of user
-    static String username;
-    public SellProduct(String username) {
-        SellProduct.username = username;
+    private String username;
+    private Connection conn;
+    public SellProduct(String username, Connection conn) {
+        this.username = username;
+        this.conn = conn;
     }
 
-    public static void start() {
+    public void start() {
         Stage primaryStage = new Stage();
-        Connection conn = ConnectionFactory.getInstance().open();
         primaryStage.setTitle("Sell Product");
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -83,11 +84,6 @@ public class SellProduct {
             }
             if(custId == -1) {
                 AlertBox2.alert("Unsuccessful", "Customer Could not be Added");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
                 primaryStage.close();
                 return;
             }
@@ -95,19 +91,9 @@ public class SellProduct {
             boolean sold = new Seller(conn, username).sellProduct(Integer.parseInt(prodId.getText()), custId, uId, Integer.parseInt(quantity.getText()));
             if(sold) {
                 AlertBox2.alert("Successful", "Product Sold Successfully");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
                 primaryStage.close();
             } else {
                 AlertBox2.alert("Unsuccessful", "Product Could not be sold");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
                 primaryStage.close();
             }
         });

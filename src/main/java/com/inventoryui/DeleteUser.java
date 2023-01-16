@@ -19,11 +19,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class DeleteUser {
+    private final Connection conn;
+    public DeleteUser(Connection conn) {
+        this.conn = conn;
+    }
 
-    public static void start() {
+    public void start() {
         Stage primaryStage = new Stage();
 //        primaryStage.initModality(Modality.APPLICATION_MODAL);
-        Connection conn = ConnectionFactory.getInstance().open();
         primaryStage.setTitle("Delete Employee");
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -45,32 +48,17 @@ public class DeleteUser {
 
         submit.setOnAction(e -> {   // todo: check if supplier exists first
             if(!new UsersDAO(conn).userExists(Integer.parseInt(userId.getText()))) {
-                AlertBox2.alert("Unsuccessful", "User Not found");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
+                AlertBox2.alert("Unsuccessful", "Employee Not found");
                 primaryStage.close();
                 return;
             }
 
             boolean deleted = new Admin(conn, "xyz").deleteUser(Integer.parseInt(userId.getText()));
             if(!deleted) {
-                AlertBox2.alert("Unsuccessful", "User Could not be Deleted");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
+                AlertBox2.alert("Unsuccessful", "Employee Could not be Deleted");
                 primaryStage.close();
             } else {
-                AlertBox2.alert("Successful", "User Deleted Successfully");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
+                AlertBox2.alert("Successful", "Employee Deleted Successfully");
                 primaryStage.close();
             }
         });

@@ -190,6 +190,7 @@ public class Admin implements DatabaseConstants {
             user.setUserPhone(uPhone);
             user.setUserLocation(location);
             user.setCategory(category);
+            user.setUsername(new UsersDAO(conn).getUsername(userId));
 
             boolean updated = new UsersDAO(conn).updateUserDetails(user);
             if(!updated)

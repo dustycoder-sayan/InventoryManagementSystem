@@ -91,9 +91,11 @@ public class Seller implements DatabaseConstants {
         }
     }
 
-    public boolean setNewPassword(String password) {
+    public boolean setNewPassword(String oldPassword, String newPassword) {
         try {
-            boolean updated = new UsersDAO(conn).updatePassword(username, password);
+            if(!new UsersDAO(conn).checkPasswordCorrect(username, oldPassword))
+                throw new Exception("Old Password Wrong");
+            boolean updated = new UsersDAO(conn).updatePassword(username, newPassword);
             if(!updated)
                 throw new Exception("Error");
             return true;

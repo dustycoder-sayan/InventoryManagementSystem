@@ -21,6 +21,23 @@ public class UsersDAO implements DatabaseConstants {
                 +USERS_PHONE+"=?";
         try {
             PreparedStatement queryUser = conn.prepareStatement(QUERY_USER);
+            queryUser.setString(1, uName);
+            queryUser.setString(2, uPhone);
+            ResultSet resultSet = queryUser.executeQuery();
+            if(resultSet == null)
+                throw new SQLException("Could not find User");
+            return resultSet.getString(1);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public String getUsername(int uId) {
+        final String QUERY_USER = "SELECT "+USERS_USERNAME+" FROM "+USERS_TABLE+" WHERE "+USERS_ID+"=?";
+        try {
+            PreparedStatement queryUser = conn.prepareStatement(QUERY_USER);
+            queryUser.setInt(1, uId);
             ResultSet resultSet = queryUser.executeQuery();
             if(resultSet == null)
                 throw new SQLException("Could not find User");

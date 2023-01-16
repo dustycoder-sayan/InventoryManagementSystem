@@ -26,10 +26,14 @@ public class UpdateSupplier {
     // todo: if time permits, add label within the scene for "Add Product"
     // todo: Cement oldPhone after retrieving from db
 
-    public static void start() {
+    private final Connection conn;
+    public UpdateSupplier(Connection conn) {
+        this.conn = conn;
+    }
+
+    public void start() {
         Stage primaryStage = new Stage();
 //        primaryStage.initModality(Modality.APPLICATION_MODAL);
-        Connection conn = ConnectionFactory.getInstance().open();
         primaryStage.setTitle("Update Supplier");
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -64,11 +68,6 @@ public class UpdateSupplier {
         submit.setOnAction(e -> {   // todo: check if supplier exists first
             if(!new SuppliersDAO(conn).supplierExists(supplierName.getText(), supplierOldPhone.getText())) {
                 AlertBox2.alert("Unsuccessful", "Supplier Not found");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
                 primaryStage.close();
                 return;
             }
@@ -78,19 +77,9 @@ public class UpdateSupplier {
 
             if(!updated) {
                 AlertBox2.alert("Unsuccessful", "Supplier Could not be Updated");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
                 primaryStage.close();
             } else {
                 AlertBox2.alert("Successful", "Supplier Updated Successfully");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
                 primaryStage.close();
             }
         });

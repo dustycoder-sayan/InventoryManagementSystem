@@ -23,13 +23,15 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class AddSupplier {
+    private final Connection conn;
+    public AddSupplier(Connection conn) {
+        this.conn = conn;
+    }
 
-    public static void start() {
+    public void start() {
         Stage primaryStage = new Stage();
 
         primaryStage.initModality(Modality.APPLICATION_MODAL);
-
-        Connection conn = ConnectionFactory.getInstance().open();
         primaryStage.setTitle("Add Supplier");
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -61,19 +63,9 @@ public class AddSupplier {
             int sId = new Admin(conn, "dummy.xyz").insertSupplier(supplierName.getText(), supplierPhone.getText(), supplierLocation.getText());
             if(sId == -1) {
                 AlertBox2.alert("Unsuccessful", "Supplier Could not be Added");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
                 primaryStage.close();
             } else {
                 AlertBox2.alert("Successful", "Supplier Added Successfully");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
                 primaryStage.close();
             }
         });

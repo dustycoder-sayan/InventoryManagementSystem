@@ -24,11 +24,14 @@ import java.sql.SQLException;
 
 public class DeleteSupplier {
     // todo: if time permits, add label within the scene for "Add Product"
+    private final Connection conn;
+    public DeleteSupplier(Connection conn) {
+        this.conn = conn;
+    }
 
-    public static void start() {
+    public void start() {
         Stage primaryStage = new Stage();
 //        primaryStage.initModality(Modality.APPLICATION_MODAL);
-        Connection conn = ConnectionFactory.getInstance().open();
         primaryStage.setTitle("Delete Supplier");
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -60,19 +63,9 @@ public class DeleteSupplier {
             boolean deleted = new Admin(conn,"xyz").deleteSupplier(supplierName.getText(), supplierPhone.getText());
             if(deleted) {
                 AlertBox2.alert("Successful", "Supplier Deleted Successfully");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
                 primaryStage.close();
             } else {
                 AlertBox2.alert("Unsuccessful", "Supplier Could not be Deleted");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
                 primaryStage.close();
             }
         });

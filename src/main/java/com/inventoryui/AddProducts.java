@@ -25,12 +25,15 @@ import java.sql.SQLException;
 public class AddProducts {
     // todo: if time permits, add label within the scene for "Add Product"
     // todo: if time permits, add label within the scene for each textfield
-    public static void start() {
+    private final Connection conn;
+    public AddProducts(Connection conn) {
+        this.conn = conn;
+    }
+
+    public void start() {
         Stage primaryStage = new Stage();
 
 //        primaryStage.initModality(Modality.APPLICATION_MODAL);
-
-        Connection conn = ConnectionFactory.getInstance().open();
         primaryStage.setTitle("Add Product");
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -80,11 +83,6 @@ public class AddProducts {
         submit.setOnAction(e -> {
             if(!new SuppliersDAO(conn).supplierExists(supplierName.getText(), supplierPhone.getText())) {
                 AlertBox2.alert("Unsuccessful", "Supplier Not found");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
                 primaryStage.close();
                 return;
             }
@@ -98,20 +96,10 @@ public class AddProducts {
 
             if(pId!=-1) {
                 AlertBox2.alert("Successful", "Product Added Successfully");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
                 primaryStage.close();
             }
             else {
                 AlertBox2.alert("Unsuccessful", "Product Could not be Added");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
                 primaryStage.close();
             }
         });

@@ -83,7 +83,7 @@ public class AdminPage {
 
         settings = makeBranch("Settings", root);
         makeBranch("Update Details", settings);
-        makeBranch("Change Password", settings);
+        makeBranch("Update Password", settings);
         makeBranch("Logout", settings);
 
         tree = new TreeView<>(root);
@@ -169,36 +169,36 @@ public class AdminPage {
                 layout.setCenter(table1);
             }
             else if(valueSelected.equals("Add New Product")) {
-                AddProducts.start();
+                new AddProducts(conn).start();
             }
             else if(valueSelected.equals("Update Stock")) {
-                UpdateStock.start();
+                new UpdateStock(conn).start();
             }
             else if(valueSelected.equals("Delete Product")) {
-                DeleteProduct.start();
+                new DeleteProduct(conn).start();
             }
             else if(valueSelected.equals("Add New Supplier")) {
-                AddSupplier.start();
+                new AddSupplier(conn).start();
             }
             else if(valueSelected.equals("Update Supplier")) {
-                UpdateSupplier.start();
+                new UpdateSupplier(conn).start();
             }
             else if(valueSelected.equals("Delete Supplier")) {
-                DeleteSupplier.start();
+                new DeleteSupplier(conn).start();
             }
             else if(valueSelected.equals("Add New Employee")) {
-                AddUser.start();
+                new AddUser(conn).start();
             }
             else if(valueSelected.equals("Update Employee")) {
-                UpdateUser.start();
+                new UpdateUser(conn).start();
             }
             else if(valueSelected.equals("Delete Employee")) {
-                DeleteUser.start();
+                new DeleteUser(conn).start();
             }
             else if(valueSelected.equalsIgnoreCase("Update Details")) {
                 new UpdateAdminDetails(username, conn).start();
             }
-            else if(valueSelected.equalsIgnoreCase("Change Password")) {
+            else if(valueSelected.equalsIgnoreCase("Update Password")) {
                 new PasswordUpdate(username, conn).start();
             }
             else if(valueSelected.equals("Logout")) {

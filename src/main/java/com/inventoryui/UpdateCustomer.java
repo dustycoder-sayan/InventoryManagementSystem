@@ -26,11 +26,14 @@ import java.sql.SQLException;
 public class UpdateCustomer {
     // todo: if time permits, add label within the scene for "Add Product"
     // todo: Cement oldPhone after retrieving from db
+    private final Connection conn;
+    public UpdateCustomer(Connection conn) {
+        this.conn = conn;
+    }
 
-    public static void start() {
+    public void start() {
         Stage primaryStage = new Stage();
 //        primaryStage.initModality(Modality.APPLICATION_MODAL);
-        Connection conn = ConnectionFactory.getInstance().open();
         primaryStage.setTitle("Update Customer");
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -67,19 +70,9 @@ public class UpdateCustomer {
                     customerNewPhone.getText(), customerLocation.getText());
             if(!updated) {
                 AlertBox2.alert("Unsuccessful", "Customer Could not be Updated");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
                 primaryStage.close();
             } else {
                 AlertBox2.alert("Successful", "Customer Added Successfully");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
                 primaryStage.close();
             }
         });
