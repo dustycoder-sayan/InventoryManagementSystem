@@ -1,6 +1,7 @@
 package com.inventory.DataSource;
 
 import com.inventory.DAO.CustomerDAO;
+import com.inventory.DAO.IssueProductDAO;
 import com.inventory.DAO.UsersDAO;
 import com.inventory.DTO.*;
 import com.inventory.database.DatabaseConstants;
@@ -19,6 +20,57 @@ public class Seller implements DatabaseConstants {
     public Seller(Connection conn, String username) {
         this.conn=conn;
         this.username = username;
+    }
+
+    public String getSellerFirstName() {
+        final String GET_FIRST_NAME = "SELECT U_NAME FROM USERS WHERE USERNAME=?";
+        try {
+            PreparedStatement getFirstName = conn.prepareStatement(GET_FIRST_NAME);
+            getFirstName.setString(1, username);
+            ResultSet result = getFirstName.executeQuery();
+            String name = result.getString(1);
+            if(name.indexOf(' ')==-1)
+                return name;
+            return name.substring(0, name.indexOf(' '));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public String getSellerFullName() {
+        final String GET_FIRST_NAME = "SELECT U_NAME FROM USERS WHERE USERNAME=?";
+        try {
+            PreparedStatement getFirstName = conn.prepareStatement(GET_FIRST_NAME);
+            getFirstName.setString(1, username);
+            ResultSet result = getFirstName.executeQuery();
+            return result.getString(1);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public String getSellerPhone() {
+        final String GET_PHONE = "SELECT U_PHONE FROM USERS WHERE USERNAME=?";
+        try {
+            PreparedStatement getFirstName = conn.prepareStatement(GET_PHONE);
+            getFirstName.setString(1, username);
+            ResultSet result = getFirstName.executeQuery();
+            return result.getString(1);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public String getSellerLocation() {
+        final String GET_LOCATION = "SELECT U_LOCATION FROM USERS WHERE USERNAME=?";
+        try {
+            PreparedStatement getFirstName = conn.prepareStatement(GET_LOCATION);
+            getFirstName.setString(1, username);
+            ResultSet result = getFirstName.executeQuery();
+            return result.getString(1);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public boolean updateUserDetails(String newPhone, String location) {
@@ -161,9 +213,9 @@ public class Seller implements DatabaseConstants {
     }
 
     // Get Total Earnings
-    public Double getTotalEarnings() {
+    public double getTotalEarnings() {
         final String TOTAL_EARNINGS = "SELECT SUM(P."+PRODUCTS_SELLING_PRICE+"*IP."+ISSUE_QUANTITY+") FROM "
-                +PRODUCTS_TABLE+" P, "+ISSUE_PRODUCT_TABLE+" IP WHERE IP."+ISSUE_U_ID+"=?";
+                +PRODUCTS_TABLE+" P, "+ISSUE_PRODUCT_TABLE+" IP WHERE IP.P_ID = P.P_ID AND IP."+ISSUE_U_ID+"=? ";
         try {
             PreparedStatement totalEarnings = conn.prepareStatement(TOTAL_EARNINGS);
             totalEarnings.setInt(1, new UsersDAO(conn).getUserId(username));
@@ -176,9 +228,9 @@ public class Seller implements DatabaseConstants {
     }
 
     // Get Total Profit
-    public Double getTotalProfit() {
+    public double getTotalProfit() {
         final String TOTAL_EARNINGS = "SELECT SUM(P."+PRODUCTS_SELLING_PRICE+"-"+PRODUCTS_COST_PRICE+"*IP."+ISSUE_QUANTITY+") FROM "
-                +PRODUCTS_TABLE+" P, "+ISSUE_PRODUCT_TABLE+" IP WHERE IP."+ISSUE_U_ID+"=?";
+                +PRODUCTS_TABLE+" P, "+ISSUE_PRODUCT_TABLE+" IP WHERE IP.P_ID = P.P_ID AND IP."+ISSUE_U_ID+"=?";
         try {
             PreparedStatement totalEarnings = conn.prepareStatement(TOTAL_EARNINGS);
             totalEarnings.setInt(1, new UsersDAO(conn).getUserId(username));
@@ -235,6 +287,22 @@ public class Seller implements DatabaseConstants {
             return null;
         }
     }
-}
 
-// TODO: Delete Customer function
+    public boolean sellProduct(int pId, int cId, int uId, int quantity) {
+        try {
+            IssueProductDTO issue = new IssueProductDTO();
+            issue.setpId(pId);
+            issue.setuId(uId);
+            issue.setcId(cId);
+            issue.setQuantity(quantity);
+            issue.setDateSold(new java.sql.Date(System.currentTimeMillis()).toString());
+            boolean added = new IssueProductDAO(conn).addIssueProduct(issue);
+            if(!added)
+                throw new SQLException("Could Not Add Sale");
+            return true;
+        } catch (Exception e ){
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+}

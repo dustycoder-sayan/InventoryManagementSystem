@@ -20,6 +20,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class AddUser {
 
@@ -66,13 +67,28 @@ public class AddUser {
                         userCategory.getText());
                 if(uId == -1) {
                     AlertBox2.alert("Unsuccessful", "User Could not be Added");
+                    try {
+                        conn.close();
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     primaryStage.close();
                 } else {
                     AlertBox2.alert("Successful", "User Added Successfully");
+                    try {
+                        conn.close();
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     primaryStage.close();
                 }
             } else {
                 AlertBox2.alert("Unsuccessful", "Category Non Existent");
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
                 primaryStage.close();
             }
         });

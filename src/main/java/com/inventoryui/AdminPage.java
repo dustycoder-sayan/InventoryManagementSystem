@@ -3,7 +3,6 @@ package com.inventoryui;
 import com.inventory.DTO.*;
 import com.inventory.DataSource.Admin;
 import com.inventory.database.ConnectionFactory;
-import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -17,10 +16,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import java.sql.BatchUpdateException;
 import java.sql.Connection;
 
-public class AdminPage extends Application {
+public class AdminPage {
 
     private Label nameLabel, userName, userUsername, userCategory, userPhone, userLocation;
     private TreeView<String> tree;
@@ -28,8 +26,12 @@ public class AdminPage extends Application {
     private Connection conn = ConnectionFactory.getInstance().open();
     private TextField productName, brandName;
 
-    public void start(Stage stage) throws Exception {
-        stage.setTitle("Welcome, Admin!");  // todo: put admin name
+    public AdminPage(String username) {
+        this.username = username;
+    }
+
+    public Scene adminScene(Stage stage) {
+        stage.setTitle("Welcome, "+new Admin(conn, username).getAdminFirstName());
         BorderPane layout = new BorderPane();
 
         // Top Part
@@ -37,7 +39,7 @@ public class AdminPage extends Application {
         top.setPadding(new Insets(10, 10, 10, 10));
         top.setSpacing(10);
         nameLabel = new Label();
-        nameLabel.setText("Hi, Karteek!");     // TODO: Get First Name from Username
+        nameLabel.setText("Hi, "+new Admin(conn, username).getAdminFirstName()+"!");
         nameLabel.setFont(new Font("Calibri", 30));
         top.getChildren().add(nameLabel);
         top.setAlignment(Pos.CENTER);
@@ -81,36 +83,37 @@ public class AdminPage extends Application {
 
         settings = makeBranch("Settings", root);
         makeBranch("Update Details", settings);
-        makeBranch("Update Password", settings);
+        makeBranch("Change Password", settings);
         makeBranch("Logout", settings);
 
         tree = new TreeView<>(root);
         tree.setShowRoot(false);
         tree.setMinHeight(775);
         tree.setPadding(new Insets(10, 10, 10, 10));
-        tree.setBorder(new Border(new BorderStroke(Color.LIGHTBLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
+        tree.setBorder(new Border(new BorderStroke(Color.LIGHTBLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
+                new BorderWidths(3))));
 
         VBox left = new VBox(20);
         left.getChildren().add(tree);
         layout.setLeft(left);
 
         // Right
-        Label about = new Label("Personal Details");    // TODO: If possible, Image of User
+        Label about = new Label("Personal Details");
         about.setPadding(new Insets(10, 10, 10, 10));
-        userName = new Label("Karteek G.C.R");  // Todo: Get all from table
+        userName = new Label(new Admin(conn, username).getAdminFullName());
         userName.setPadding(new Insets(20, 10, 10, 10));
         userName.setAlignment(Pos.CENTER);
         userName.setFont(new Font("Calibri", 20));
-        userUsername = new Label("karteek1234");
+        userUsername = new Label(username);
         userUsername.setPadding(new Insets(10, 10, 10, 10));
         userUsername.setAlignment(Pos.CENTER);
         userCategory = new Label("Admin");
         userCategory.setPadding(new Insets(10, 10, 10, 10));
         userCategory.setAlignment(Pos.CENTER);
-        userPhone = new Label("98765432");
+        userPhone = new Label(new Admin(conn, username).getAdminPhone());
         userPhone.setPadding(new Insets(10, 10, 10, 10));
         userPhone.setAlignment(Pos.CENTER);
-        userLocation = new Label("Bangalore");
+        userLocation = new Label(new Admin(conn, username).getAdminLocation());
         userLocation.setPadding(new Insets(10, 10, 10, 10));
         userLocation.setAlignment(Pos.CENTER);
 
@@ -123,7 +126,8 @@ public class AdminPage extends Application {
         right.setMinWidth(250);
         right.getChildren().addAll(userName, userCategory, userUsername, userPhone, userLocation);
         right.setAlignment(Pos.TOP_CENTER);
-        right.setBorder(new Border(new BorderStroke(Color.LIGHTBLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
+        right.setBorder(new Border(new BorderStroke(Color.LIGHTBLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
+                new BorderWidths(3))));
         layout.setRight(right);
 
         // center
@@ -191,15 +195,21 @@ public class AdminPage extends Application {
             else if(valueSelected.equals("Delete Employee")) {
                 DeleteUser.start();
             }
-//            else if(valueSelected.equals("Logout")) {
-//                new Logout(stage, new LoginPage().loginScene(), adminScene(stage)).al;
-//            }
+            else if(valueSelected.equalsIgnoreCase("Update Details")) {
+                new UpdateAdminDetails(username, conn).start();
+            }
+            else if(valueSelected.equalsIgnoreCase("Change Password")) {
+                new PasswordUpdate(username, conn).start();
+            }
+            else if(valueSelected.equals("Logout")) {
+                boolean answer = Logout.alert();
+                if(answer)
+                    stage.close();
+            }
         } );
 
 
-        Scene scene = new Scene(layout, 1250, 825);
-        stage.setScene(scene);
-        stage.show();
+        return new Scene(layout, 1250, 825);
     }
 
     public TreeItem<String> makeBranch(String title, TreeItem<String> parent) {

@@ -46,6 +46,42 @@ public class Admin implements DatabaseConstants {
         }
     }
 
+    public String getAdminPhone() {
+        final String GET_PHONE = "SELECT U_PHONE FROM USERS WHERE USERNAME=?";
+        try {
+            PreparedStatement getFirstName = conn.prepareStatement(GET_PHONE);
+            getFirstName.setString(1, username);
+            ResultSet result = getFirstName.executeQuery();
+            return result.getString(1);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public String getAdminLocation() {
+        final String GET_LOCATION = "SELECT U_LOCATION FROM USERS WHERE USERNAME=?";
+        try {
+            PreparedStatement getFirstName = conn.prepareStatement(GET_LOCATION);
+            getFirstName.setString(1, username);
+            ResultSet result = getFirstName.executeQuery();
+            return result.getString(1);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public String getAdminCategory() {
+        final String GET_CATEGORY = "SELECT U_CATEGORY FROM USERS WHERE USERNAME=?";
+        try {
+            PreparedStatement getFirstName = conn.prepareStatement(GET_CATEGORY);
+            getFirstName.setString(1, username);
+            ResultSet result = getFirstName.executeQuery();
+            return result.getString(1);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     // Update Own Details
     public boolean updateUserDetails(String newPhone, String location) {
         try {

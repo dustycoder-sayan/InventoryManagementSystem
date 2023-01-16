@@ -127,14 +127,14 @@ public class UsersDAO implements DatabaseConstants {
         // Update the Phone, Location, Category (only performed by Admin) of a User: key - username
         // Returns true if the details could be updated, else returns false
         final String UPDATE_USER = "UPDATE " + USERS_TABLE + " SET " + USERS_PHONE + "=?," + USERS_LOCATION + "=?," + USERS_CATEGORY
-                + "=? WHERE " + USERS_ID + "=?";
+                + "=? WHERE " + USERS_USERNAME + "=?";
         try {
 
             PreparedStatement updateUser = conn.prepareStatement(UPDATE_USER);
             updateUser.setString(1, usersDTO.getUserPhone());
             updateUser.setString(2, usersDTO.getUserLocation());
             updateUser.setString(3, usersDTO.getCategory());
-            updateUser.setInt(4, usersDTO.getUserId());
+            updateUser.setString(4, usersDTO.getUsername());
 
             int affectedRows = updateUser.executeUpdate();
             if (affectedRows != 1)

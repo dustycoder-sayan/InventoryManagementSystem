@@ -2,7 +2,7 @@ package com.inventory.database;
 
 public interface DatabaseConstants {
 
-    String DATABASE_NAME = "inventorymgmt.db";
+    String DATABASE_NAME = "inventory.db";
     String CONNECTION_STRING = "jdbc:sqlite:C:\\Users\\LENOVO\\OneDrive\\Documents\\Projects\\Inventory Management System\\src\\com\\inventory\\database\\"+DATABASE_NAME;
 
     String CUSTOMER_TABLE = "CUSTOMER";

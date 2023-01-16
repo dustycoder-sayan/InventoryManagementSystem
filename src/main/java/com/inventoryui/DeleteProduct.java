@@ -21,6 +21,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class DeleteProduct {
 
@@ -69,12 +70,22 @@ public class DeleteProduct {
             int sId = new SuppliersDAO(conn).getSupplierId(supName, supPhone);
             if(sId == -1) {
                 AlertBox2.alert("Unsuccessful", "Supplier Not found");
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
                 primaryStage.close();
                 return;
             }
             int pId = new ProductsDAO(conn).getProductId(prodName, prodBrand, sId);
             if(pId == -1) {
                 AlertBox2.alert("Unsuccessful", "Product Not found");
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
                 primaryStage.close();
                 return;
             }
@@ -82,10 +93,20 @@ public class DeleteProduct {
             boolean deleted = new Admin(conn, "dummy.xyz").deleteProduct(prodName, prodBrand, supName, supPhone);
             if(deleted) {
                 AlertBox2.alert("Successful", "Product Deleted Successfully");
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
                 primaryStage.close();
             }
             else {
                 AlertBox2.alert("Unsuccessful", "Product Could Not be Deleted");
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
                 primaryStage.close();
             }
         });

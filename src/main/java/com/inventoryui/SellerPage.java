@@ -4,7 +4,6 @@ import com.inventory.DTO.*;
 import com.inventory.DataSource.Admin;
 import com.inventory.DataSource.Seller;
 import com.inventory.database.ConnectionFactory;
-import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -20,16 +19,20 @@ import javafx.stage.Stage;
 
 import java.sql.Connection;
 
-public class SellerPage extends Application {
+public class SellerPage {
 
-    private Label nameLabel, userName, userUsername, userCategory, userPhone, userLocation;
+    private Label nameLabel, userName, userUsername, userCategory, userPhone, userLocation, userTotalEarnings, userTotalProfitLabel, userTotalEarningsLabel, userTotalProfit;
     private TreeView<String> tree;
-    private String username="sayan.xyz";
+    private String username;
     private Connection conn = ConnectionFactory.getInstance().open();
     private TextField productName, brandName;
 
-    public void start(Stage stage) throws Exception {
-        stage.setTitle("Welcome, Seller!"); // todo: put seller name
+    public SellerPage(String username) {
+        this.username = username;
+    }
+
+    public Scene sellerScene(Stage stage) {
+        stage.setTitle("Welcome, "+new Seller(conn, username).getSellerFirstName()); // todo: put seller name
         BorderPane layout = new BorderPane();
 
         // Top Part
@@ -37,7 +40,7 @@ public class SellerPage extends Application {
         top.setPadding(new Insets(10, 10, 10, 10));
         top.setSpacing(10);
         nameLabel = new Label();
-        nameLabel.setText("Hi, Sayan!");     // TODO: Get First Name from Username
+        nameLabel.setText("Hi, "+new Seller(conn, username).getSellerFirstName()+"!");     // TODO: Get First Name from Username
         nameLabel.setFont(new Font("Calibri", 30));
         top.getChildren().add(nameLabel);
         top.setAlignment(Pos.CENTER);
@@ -84,22 +87,46 @@ public class SellerPage extends Application {
         // Right
         Label about = new Label("Personal Details");    // TODO: If possible, Image of User
         about.setPadding(new Insets(10, 10, 10, 10));
-        userName = new Label("Sayan Basu");  // Todo: Get all from table
+        userName = new Label(new Seller(conn, username).getSellerFullName());  // Todo: Get all from table
         userName.setPadding(new Insets(20, 10, 10, 10));
         userName.setAlignment(Pos.CENTER);
         userName.setFont(new Font("Calibri", 20));
-        userUsername = new Label("karteek1234");
+        userUsername = new Label(username);
         userUsername.setPadding(new Insets(10, 10, 10, 10));
         userUsername.setAlignment(Pos.CENTER);
         userCategory = new Label("Seller");
         userCategory.setPadding(new Insets(10, 10, 10, 10));
         userCategory.setAlignment(Pos.CENTER);
-        userPhone = new Label("9591059018");
+        userPhone = new Label(new Seller(conn,username).getSellerPhone());
         userPhone.setPadding(new Insets(10, 10, 10, 10));
         userPhone.setAlignment(Pos.CENTER);
-        userLocation = new Label("Bangalore");
+        userLocation = new Label(new Seller(conn,username).getSellerLocation());
         userLocation.setPadding(new Insets(10, 10, 10, 10));
         userLocation.setAlignment(Pos.CENTER);
+
+        userTotalEarningsLabel = new Label("Total Sold: ");
+        userTotalEarningsLabel.setPadding(new Insets(10, 10, 10, 10));
+        userTotalEarningsLabel.setAlignment(Pos.CENTER);
+
+        double totalEarnings = new Seller(conn, username).getTotalEarnings();
+        if(totalEarnings == -1)
+            totalEarnings=0;
+
+        userTotalEarnings = new Label(String.valueOf(totalEarnings));
+        userTotalEarnings.setPadding(new Insets(10, 10, 10, 10));
+        userTotalEarnings.setAlignment(Pos.CENTER);
+
+        userTotalProfitLabel = new Label("Total Profit Earned: ");
+        userTotalProfitLabel.setPadding(new Insets(10, 10, 10, 10));
+        userTotalProfitLabel.setAlignment(Pos.CENTER);
+
+        double totalProfit = new Seller(conn, username).getTotalProfit();
+        if(totalProfit == -1)
+            totalProfit=0;
+
+        userTotalProfit = new Label(String.valueOf(totalProfit));
+        userTotalProfit.setPadding(new Insets(10, 10, 10, 10));
+        userTotalProfit.setAlignment(Pos.CENTER);
 
         HBox spacing = new HBox();
         spacing.setMinHeight(50);
@@ -108,7 +135,8 @@ public class SellerPage extends Application {
         right.setBackground(new Background(new BackgroundFill(Color.WHITE,
                 CornerRadii.EMPTY, Insets.EMPTY)));
         right.setMinWidth(250);
-        right.getChildren().addAll(userName, userCategory, userUsername, userPhone, userLocation);
+        right.getChildren().addAll(userName, userCategory, userUsername, userPhone, userLocation, userTotalEarningsLabel,
+                userTotalEarnings, userTotalProfitLabel, userTotalProfit);
         right.setAlignment(Pos.TOP_CENTER);
         right.setBorder(new Border(new BorderStroke(Color.LIGHTBLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
         layout.setRight(right);
@@ -138,15 +166,20 @@ public class SellerPage extends Application {
             else if(valueSelected.equals("Sell")) {
                 SellProduct.start();
             }
-//            else if(valueSelected.equals("Logout")) {
-//                new Logout(stage, new LoginPage().loginScene(), adminScene(stage)).al;
-//            }
+            else if(valueSelected.equalsIgnoreCase("Update Details")) {
+                new UpdateAdminDetails(username, conn).start();
+            }
+            else if(valueSelected.equalsIgnoreCase("Change Password")) {
+                new PasswordUpdate(username, conn).start();
+            }
+            else if(valueSelected.equals("Logout")) {
+                boolean answer = Logout.alert();
+                if(answer)
+                    stage.close();
+            }
         } );
 
-
-        Scene scene = new Scene(layout, 1250, 825);
-        stage.setScene(scene);
-        stage.show();
+        return new Scene(layout, 1250, 825);
     }
 
     public TreeItem<String> makeBranch(String title, TreeItem<String> parent) {
