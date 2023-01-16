@@ -2,9 +2,17 @@ package com.inventory.DTO;
 
 public class ProductsDTO {
     private int productId, sId, currentStock;
-    private String productName, productBrand, dateAdded;
+    private String productName, productBrand, dateAdded, supplierName;
     private double costPrice;
     private double sellingPrice;
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
 
     public void setTotalSales(double totalSales) {
         this.totalSales = totalSales;

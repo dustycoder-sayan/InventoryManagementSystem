@@ -246,7 +246,7 @@ public class Seller implements DatabaseConstants {
 
     // Returns customer with most sales
     public List<MaxCustomer> getMaxSalesCustomer() {
-        final String MAX_CUSTOMER = "SELECT C.C_ID, C."+CUSTOMER_NAME+", SUM(P."+PRODUCTS_SELLING_PRICE+"*IP."+ISSUE_QUANTITY
+        final String MAX_CUSTOMER = "SELECT C.C_ID, C."+CUSTOMER_NAME+", C.C_PHONE, SUM(P."+PRODUCTS_SELLING_PRICE+"*IP."+ISSUE_QUANTITY
                 +") FROM "+CUSTOMER_TABLE+" C,"+PRODUCTS_TABLE+" P,"+ISSUE_PRODUCT_TABLE+" IP WHERE P."
                 +PRODUCTS_ID+"=IP."+ISSUE_P_ID+" AND IP."+ISSUE_C_ID+"=C."+CUSTOMER_ID+" AND IP."+ISSUE_U_ID
                 +"=? GROUP BY IP."+ISSUE_U_ID+",IP."+ISSUE_C_ID+" ORDER BY SUM(P."+PRODUCTS_SELLING_PRICE+"*IP."+ISSUE_QUANTITY+") DESC";
@@ -257,30 +257,8 @@ public class Seller implements DatabaseConstants {
             ResultSet results = maxCustomer.executeQuery();
             List<MaxCustomer> max = new ArrayList<>();
             while(results.next()) {
-                MaxCustomer maxCus = new MaxCustomer(results.getInt(1), results.getString(2), results.getDouble(3));
-                max.add(maxCus);
-            }
-            return max;
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
-    }
-
-    // Returns customer with most orders
-    public List<MaxCustomer> getMaxOrdersCustomer() {
-        final String MAX_CUSTOMER = "SELECT C.C_ID, C."+CUSTOMER_NAME+", COUNT(IP."+ISSUE_C_ID+") FROM "+CUSTOMER_TABLE+" C,"
-                +PRODUCTS_TABLE+" P,"+ISSUE_PRODUCT_TABLE+" IP WHERE P."
-                +PRODUCTS_ID+"=IP."+ISSUE_P_ID+" AND IP."+ISSUE_C_ID+"=C."+CUSTOMER_ID+" AND IP."+ISSUE_U_ID
-                +"=? GROUP BY IP."+ISSUE_U_ID+",IP."+ISSUE_C_ID+" ORDER BY COUNT(IP."+ISSUE_C_ID+") DESC";
-        try {
-            PreparedStatement maxCustomer = conn.prepareStatement(MAX_CUSTOMER);
-            maxCustomer.setInt(1, new UsersDAO(conn).getUserId(username));
-
-            ResultSet results = maxCustomer.executeQuery();
-            List<MaxCustomer> max = new ArrayList<>();
-            while(results.next()) {
-                MaxCustomer maxCus = new MaxCustomer(results.getInt(1), results.getString(2), results.getDouble(3));
+                MaxCustomer maxCus = new MaxCustomer(results.getInt(1), results.getString(2), results.getString(3),
+                        results.getDouble(4));
                 max.add(maxCus);
             }
             return max;

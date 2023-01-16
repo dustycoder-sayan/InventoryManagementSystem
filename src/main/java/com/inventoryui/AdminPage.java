@@ -334,7 +334,7 @@ public class AdminPage {
         prodBrand.setMinWidth(230);
         prodBrand.setStyle( "-fx-alignment: CENTER;");
 
-        TableColumn<ProductsDTO, String> totalSales = new TableColumn<>("Sold");
+        TableColumn<ProductsDTO, Integer> totalSales = new TableColumn<>("Sold");
         totalSales.setCellValueFactory(new PropertyValueFactory<>("totalSales"));
         totalSales.setMinWidth(240);
         totalSales.setStyle( "-fx-alignment: CENTER;");
@@ -344,9 +344,14 @@ public class AdminPage {
         prodId.setMinWidth(240);
         prodId.setStyle( "-fx-alignment: CENTER;");
 
+        TableColumn<ProductsDTO, String> supName = new TableColumn<>("Supplier");
+        supName.setCellValueFactory(new PropertyValueFactory<>("supplierName"));
+        supName.setMinWidth(240);
+        supName.setStyle( "-fx-alignment: CENTER;");
+
         TableView<ProductsDTO> table2 = new TableView<>();
         table2.setItems(maxSoldProduct());
-        table2.getColumns().addAll(prodId, prodName, prodBrand, totalSales);
+        table2.getColumns().addAll(prodId, prodName, prodBrand, supName, totalSales);
 
         return table2;
     }

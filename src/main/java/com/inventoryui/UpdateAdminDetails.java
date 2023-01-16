@@ -60,7 +60,7 @@ public class UpdateAdminDetails {
 
         submit.setOnAction(e -> {
             String userPhone = phone.getText();
-            String userLocation = phone.getText();
+            String userLocation = location.getText();
 
             boolean updated = new Admin(conn, username).updateUserDetails(userPhone, userLocation);
             if(!updated) {

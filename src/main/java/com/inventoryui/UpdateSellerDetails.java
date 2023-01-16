@@ -61,7 +61,7 @@ public class UpdateSellerDetails {
 
         submit.setOnAction(e -> {
             String userPhone = phone.getText();
-            String userLocation = phone.getText();
+            String userLocation = location.getText();
 
             boolean updated = new Seller(conn, username).updateUserDetails(userPhone, userLocation);
             if(!updated) {

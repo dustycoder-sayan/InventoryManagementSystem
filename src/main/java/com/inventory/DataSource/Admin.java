@@ -476,10 +476,11 @@ public class Admin implements DatabaseConstants {
 
     // Get the maximum product stock that has been sold
     public List<ProductsDTO> maxProductSold() {
-        final String MAX_PROD_SOLD = "SELECT P.P_ID, P."+PRODUCTS_NAME+",P."+PRODUCTS_BRAND+",SUM(IP.QUANTITY) FROM "+PRODUCTS_TABLE+" P,"
+        final String MAX_PROD_SOLD = "SELECT P.P_ID, P."+PRODUCTS_NAME+",P."+PRODUCTS_BRAND+",S.S_NAME,SUM(IP.QUANTITY*P.SELLING_PRICE)" +
+                " FROM "+PRODUCTS_TABLE+" P,"
                 +SUPPLIERS_TABLE+" S,"+ISSUE_PRODUCT_TABLE+" IP WHERE P."+PRODUCTS_S_ID+"=S."+SUPPLIERS_ID
                 +" AND IP."+ISSUE_P_ID+"=P."+PRODUCTS_ID+" GROUP BY IP."+ISSUE_P_ID
-                +" ORDER BY SUM(IP.QUANTITY) DESC";
+                +" ORDER BY SUM(IP.QUANTITY*P.SELLING_PRICE) DESC";
         try {
             PreparedStatement maxProdSold = conn.prepareStatement(MAX_PROD_SOLD);
             ResultSet results = maxProdSold.executeQuery();
@@ -489,7 +490,8 @@ public class Admin implements DatabaseConstants {
                 product.setProductId(results.getInt(1));
                 product.setProductName(results.getString(2));
                 product.setProductBrand(results.getString(3));
-                product.setTotalSales(results.getDouble(4));
+                product.setSupplierName(results.getString(4));
+                product.setTotalSales(results.getDouble(5));
 
                 products.add(product);
             }

@@ -30,9 +30,10 @@ public class UpdateStock {
         this.conn = conn;
     }
 
-    public void start() {
+    public static void start() {
         Stage primaryStage = new Stage();
 //        primaryStage.initModality(Modality.APPLICATION_MODAL);
+        Connection conn = ConnectionFactory.getInstance().open();
         primaryStage.setTitle("Update Stock");
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -74,13 +75,23 @@ public class UpdateStock {
         submit.setOnAction(e -> {
             int sId;
             if(!new SuppliersDAO(conn).supplierExists(supplierName.getText(), supplierPhone.getText())) {
-                AlertBox2.alert("Unsuccessful", "Product Not found");
+                AlertBox2.alert("Unsuccessful", "Supplier Not found");
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
                 primaryStage.close();
                 return;
             }
             sId = new SuppliersDAO(conn).getSupplierId(supplierName.getText(), supplierPhone.getText());
             if(!new ProductsDAO(conn).productExists(name.getText(), brand.getText(), sId)) {
                 AlertBox2.alert("Unsuccessful", "Product Not found");
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
                 primaryStage.close();
                 return;
             }
@@ -92,10 +103,20 @@ public class UpdateStock {
 
             if(updated) {
                 AlertBox2.alert("Successful", "Product Stock Updated Successfully");
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
                 primaryStage.close();
             }
             else {
-                AlertBox2.alert("Unsuccessful", "Product Stock Could not be Updated");
+                AlertBox2.alert("Unsuccessful", "Stock Could not be Updated");
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
                 primaryStage.close();
             }
         });

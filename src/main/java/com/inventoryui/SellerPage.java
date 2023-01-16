@@ -296,22 +296,27 @@ public class SellerPage {
     public TableView<MaxCustomer> viewMaxCustomers() {
         TableColumn<MaxCustomer, Integer> customerID = new TableColumn<>("Customer ID");
         customerID.setCellValueFactory(new PropertyValueFactory<>("customerId"));
-        customerID.setMinWidth(320);
+        customerID.setMinWidth(240);
         customerID.setStyle( "-fx-alignment: CENTER;");
 
         TableColumn<MaxCustomer, String> customerName = new TableColumn<>("Name");
         customerName.setCellValueFactory(new PropertyValueFactory<>("customerName"));
-        customerName.setMinWidth(320);
+        customerName.setMinWidth(240);
         customerName.setStyle( "-fx-alignment: CENTER;");
+
+        TableColumn<MaxCustomer, String> customerPhone = new TableColumn<>("Contact No");
+        customerPhone.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
+        customerPhone.setMinWidth(240);
+        customerPhone.setStyle( "-fx-alignment: CENTER;");
 
         TableColumn<MaxCustomer, Double> totalBuys = new TableColumn<>("Total Sales");
         totalBuys.setCellValueFactory(new PropertyValueFactory<>("totalBuys"));
-        totalBuys.setMinWidth(320);
+        totalBuys.setMinWidth(240);
         totalBuys.setStyle( "-fx-alignment: CENTER;");
 
         TableView<MaxCustomer> table2 = new TableView<>();
         table2.setItems(allCustomers());
-        table2.getColumns().addAll(customerID, customerName, totalBuys);
+        table2.getColumns().addAll(customerID, customerName, customerPhone, totalBuys);
 
         return table2;
     }
