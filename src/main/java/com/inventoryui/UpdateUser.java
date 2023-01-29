@@ -40,21 +40,33 @@ public class UpdateUser {
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
+        Label empId = new Label("Employee ID: ");
+        empId.setFont(new Font("Arial", 15));
+        grid.add(empId, 0, 1);
+
         TextField userId = new TextField();
-        userId.setPromptText("Employee ID");
-        grid.add(userId, 0, 1);
+        grid.add(userId, 1, 1);
+
+        Label contactLabel = new Label("Employee Contact: ");
+        contactLabel.setFont(new Font("Arial", 15));
+        grid.add(contactLabel, 0, 2);
 
         TextField userPhone = new TextField();
-        userPhone.setPromptText("Employee Contact");
-        grid.add(userPhone, 1, 1);
+        grid.add(userPhone, 1, 2);
+
+        Label locationLabel = new Label("Employee Location: ");
+        locationLabel.setFont(new Font("Arial", 15));
+        grid.add(locationLabel, 0, 3);
 
         TextField userLocation = new TextField();
-        userLocation.setPromptText("Employee Location");
-        grid.add(userLocation, 0, 2);
+        grid.add(userLocation, 1, 3);
+
+        Label categoryLabel = new Label("Employee Category: ");
+        categoryLabel.setFont(new Font("Arial", 15));
+        grid.add(categoryLabel, 0, 4);
 
         TextField userCategory = new TextField();
-        userCategory.setPromptText("Employee Category");
-        grid.add(userCategory, 1, 2);
+        grid.add(userCategory, 1, 4);
 
         Button submit = new Button("Submit");
         submit.setFont(new Font("Arial", 15));
@@ -62,7 +74,7 @@ public class UpdateUser {
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.CENTER_LEFT);
         hbBtn.getChildren().add(submit);
-        grid.add(hbBtn, 0, 4);
+        grid.add(hbBtn, 1, 6);
 
         submit.setOnAction(e -> {
             String category = userCategory.getText();

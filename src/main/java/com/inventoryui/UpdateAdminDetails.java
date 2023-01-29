@@ -42,21 +42,27 @@ public class UpdateAdminDetails {
         category.setFont(new Font("Arial", 15));
         grid.add(category, 1, 1);
 
+        Label phoneLabel = new Label("Contact Number: ");
+        phoneLabel.setFont(new Font("Arial", 15));
+        grid.add(phoneLabel, 0, 2);
+
         TextField phone = new TextField();
-        phone.setPromptText("Contact No");
-        grid.add(phone, 0, 2);
+        grid.add(phone, 1, 2);
+
+        Label locationLabel = new Label("Location: ");
+        locationLabel.setFont(new Font("Arial", 15));
+        grid.add(locationLabel, 0, 3);
 
         TextField location = new TextField();
-        location.setPromptText("Location");
-        grid.add(location, 1, 2);
+        grid.add(location, 1, 3);
 
         Button submit = new Button("Submit");
         submit.setFont(new Font("Arial", 15));
         submit.setTextFill(Color.DARKCYAN);
         HBox hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.CENTER_LEFT);
+        hbBtn.setAlignment(Pos.CENTER);
         hbBtn.getChildren().add(submit);
-        grid.add(hbBtn, 0, 4);
+        grid.add(hbBtn, 1, 5);
 
         submit.setOnAction(e -> {
             String userPhone = phone.getText();

@@ -38,21 +38,27 @@ public class PasswordUpdate {
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
+        Label oldPassLabel = new Label("Old Password: ");
+        oldPassLabel.setFont(new Font("Arial", 15));
+        grid.add(oldPassLabel, 0, 1);
+
         PasswordField old = new PasswordField();
-        old.setPromptText("Old Password");
-        grid.add(old, 0, 1);
+        grid.add(old, 1, 1);
+
+        Label newPassLabel = new Label("New Password: ");
+        newPassLabel.setFont(new Font("Arial", 15));
+        grid.add(newPassLabel, 0, 2);
 
         PasswordField newP = new PasswordField();
-        newP.setPromptText("New Password");
-        grid.add(newP, 1, 1);
+        grid.add(newP, 1, 2);
 
         Button submit = new Button("Submit");
         submit.setFont(new Font("Arial", 15));
         submit.setTextFill(Color.DARKCYAN);
         HBox hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.CENTER_LEFT);
+        hbBtn.setAlignment(Pos.CENTER);
         hbBtn.getChildren().add(submit);
-        grid.add(hbBtn, 0, 3);
+        grid.add(hbBtn, 1, 4);
 
         submit.setOnAction(e -> {
             boolean updated = new Admin(conn, username).setNewPassword(old.getText(), newP.getText());

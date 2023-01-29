@@ -134,13 +134,12 @@ public class Admin implements DatabaseConstants {
     }
 
     // TODO: Though here oldLocation is not specified, place oldLocation in UI for better visuals
-    public boolean updateSupplier(String supName, String oldPhone, String newPhone, String location) {
+    public boolean updateSupplier(int sId, String newPhone, String location) {
         try {
             SuppliersDTO supplier = new SuppliersDTO();
-            supplier.setSupplierName(supName);
             supplier.setSupplierPhone(newPhone);
             supplier.setSupplierLocation(location);
-            supplier.setSupplierId(new SuppliersDAO(conn).getSupplierId(supName, oldPhone));
+            supplier.setSupplierId(sId);
 
             boolean updated = new SuppliersDAO(conn).updateSupplierDetails(supplier);
             if(!updated)
@@ -225,7 +224,7 @@ public class Admin implements DatabaseConstants {
     }
 
     public int addProduct(String pName, String pBrand, double costPrice, double sellingPrice, int stock,
-                          String dateAdded, String sName, String sPhone) {
+                          String dateAdded, int sId) {
         try {
             ProductsDTO products = new ProductsDTO();
             products.setProductName(pName);
@@ -234,7 +233,7 @@ public class Admin implements DatabaseConstants {
             products.setSellingPrice(sellingPrice);
             products.setCurrentStock(stock);
             products.setDateAdded(dateAdded);
-            products.setsId(new SuppliersDAO(conn).getSupplierId(sName, sPhone));
+            products.setsId(sId);
 
             int pId = new ProductsDAO(conn).addProduct(products);
             if(pId == -1)
@@ -246,11 +245,8 @@ public class Admin implements DatabaseConstants {
         }
     }
 
-    public boolean updateStock(String prodName, String prodBrand, String supplierName, String supplierPhone, int newStock,
-                               String dateAdded) {
+    public boolean updateStock(int pId, int newStock, String dateAdded) {
         try {
-            int sId = new SuppliersDAO(conn).getSupplierId(supplierName, supplierPhone);
-            int pId = new ProductsDAO(conn).getProductId(prodName, prodBrand, sId);
             return new ProductsDAO(conn).addStock(pId, newStock, dateAdded);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -560,12 +556,9 @@ public class Admin implements DatabaseConstants {
         }
     }
 
-    public boolean deleteProduct(String prodName, String prodBrand, String supplierName, String supplierPhone) {
+    public boolean deleteProduct(int pId) {
         final String DELETE_PRODUCT = "DELETE FROM "+PRODUCTS_TABLE+" WHERE P_ID=?";
         try {
-            int sId = new SuppliersDAO(conn).getSupplierId(supplierName, supplierPhone);
-            int pId = new ProductsDAO(conn).getProductId(prodName, prodBrand, sId);
-
             PreparedStatement deleteProd = conn.prepareStatement(DELETE_PRODUCT);
             deleteProd.setInt(1, pId);
             int affectedRows = deleteProd.executeUpdate();
@@ -578,13 +571,12 @@ public class Admin implements DatabaseConstants {
         }
     }
 
-    public boolean deleteSupplier(String supName, String supNumber) {
+    public boolean deleteSupplier(int sId) {
         final String DELETE_SUPPLIER = "DELETE FROM "+SUPPLIERS_TABLE+" WHERE S_ID=?";
         try {
-            boolean exists = new SuppliersDAO(conn).supplierExists(supName, supNumber);
+            boolean exists = new SuppliersDAO(conn).supplierExists(sId);
             if(!exists)
                 throw new SQLException("No Such Supplier");
-            int sId = new SuppliersDAO(conn).getSupplierId(supName, supNumber);
             PreparedStatement delSup = conn.prepareStatement(DELETE_SUPPLIER);
             delSup.setInt(1, sId);
             int affRows = delSup.executeUpdate();

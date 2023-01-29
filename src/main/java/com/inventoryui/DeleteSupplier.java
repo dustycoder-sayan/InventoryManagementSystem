@@ -39,28 +39,27 @@ public class DeleteSupplier {
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
-        TextField supplierName = new TextField();
-        supplierName.setPromptText("Supplier Name");
-        grid.add(supplierName, 0, 1);
+        Label supIdLabel = new Label("Supplier ID: ");
+        supIdLabel.setFont(new Font("Arial", 15));
+        grid.add(supIdLabel, 0, 1);
 
-        TextField supplierPhone = new TextField();
-        supplierPhone.setPromptText("Supplier Contact");
-        grid.add(supplierPhone, 1, 1);
+        TextField supId = new TextField();
+        grid.add(supId, 1, 1);
 
         Button submit = new Button("Delete");
         submit.setFont(new Font("Arial", 15));
         submit.setTextFill(Color.RED);
         HBox hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.CENTER_LEFT);
+        hbBtn.setAlignment(Pos.CENTER);
         hbBtn.getChildren().add(submit);
-        grid.add(hbBtn, 0, 3);
+        grid.add(hbBtn, 1, 3);
 
         submit.setOnAction(e -> {
-            if(!new SuppliersDAO(conn).supplierExists(supplierName.getText(), supplierPhone.getText())) {
+            if(!new SuppliersDAO(conn).supplierExists(Integer.parseInt(supId.getText()))) {
                 AlertBox2.alert("Unsuccessful", "Supplier Not found");
             }
 
-            boolean deleted = new Admin(conn,"xyz").deleteSupplier(supplierName.getText(), supplierPhone.getText());
+            boolean deleted = new Admin(conn,"xyz").deleteSupplier(Integer.parseInt(supId.getText()));
             if(deleted) {
                 AlertBox2.alert("Successful", "Supplier Deleted Successfully");
                 primaryStage.close();

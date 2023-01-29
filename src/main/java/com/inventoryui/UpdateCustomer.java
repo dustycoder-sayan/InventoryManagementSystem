@@ -41,35 +41,47 @@ public class UpdateCustomer {
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
-        TextField customerName = new TextField();
-        customerName.setPromptText("Customer Name");
-        grid.add(customerName, 0, 1);
+        Label nameLabel = new Label("Customer Name: ");
+        nameLabel.setFont(new Font("Arial", 15));
+        grid.add(nameLabel, 0, 1);
 
-        TextField customerLocation = new TextField();
-        customerLocation.setPromptText("Customer Location");
-        grid.add(customerLocation, 1, 1);
+        TextField customerName = new TextField();
+        grid.add(customerName, 1, 1);
+
+        Label oldP = new Label("Old Contact No: ");
+        oldP.setFont(new Font("Arial", 15));
+        grid.add(oldP, 0, 2);
 
         TextField customerOldPhone = new TextField();
-        customerOldPhone.setPromptText("Customer Prev Number");
-        grid.add(customerOldPhone, 0, 2);
+        grid.add(customerOldPhone, 1, 2);
+
+        Label newP = new Label("New Contact No: ");
+        newP.setFont(new Font("Arial", 15));
+        grid.add(newP, 0, 3);
 
         TextField customerNewPhone = new TextField();
-        customerNewPhone.setPromptText("Customer Current Number");
-        grid.add(customerNewPhone, 1, 2);
+        grid.add(customerNewPhone, 1, 3);
+
+        Label locationLabel = new Label("Customer Location: ");
+        locationLabel.setFont(new Font("Arial", 15));
+        grid.add(locationLabel, 0, 4);
+
+        TextField customerLocation = new TextField();
+        grid.add(customerLocation, 1, 4);
 
         Button submit = new Button("Submit");
         submit.setFont(new Font("Arial", 15));
         submit.setTextFill(Color.DARKCYAN);
         HBox hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.CENTER_LEFT);
+        hbBtn.setAlignment(Pos.CENTER);
         hbBtn.getChildren().add(submit);
-        grid.add(hbBtn, 0, 4);
+        grid.add(hbBtn, 1, 6);
 
         submit.setOnAction(e -> {
             boolean updated = new Seller(conn, "fgh").updateCustomer(customerName.getText(), customerOldPhone.getText(),
                     customerNewPhone.getText(), customerLocation.getText());
             if(!updated) {
-                AlertBox2.alert("Unsuccessful", "Customer Could not be Updated");
+                AlertBox2.alert("Unsuccessful", "Customer Could not be Found");
                 primaryStage.close();
             } else {
                 AlertBox2.alert("Successful", "Customer Added Successfully");

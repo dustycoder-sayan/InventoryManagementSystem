@@ -7,6 +7,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -34,17 +35,20 @@ public class DeleteUser {
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
+        Label userLabel = new Label("Employee ID: ");
+        userLabel.setFont(new Font("Arial", 15));
+        grid.add(userLabel, 0, 1);
+
         TextField userId = new TextField();
-        userId.setPromptText("User ID");
-        grid.add(userId, 0, 1);
+        grid.add(userId, 1, 1);
 
         Button submit = new Button("Delete");
         submit.setFont(new Font("Arial", 15));
         submit.setTextFill(Color.RED);
         HBox hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.CENTER_LEFT);
+        hbBtn.setAlignment(Pos.CENTER);
         hbBtn.getChildren().add(submit);
-        grid.add(hbBtn, 0, 3);
+        grid.add(hbBtn, 1, 3);
 
         submit.setOnAction(e -> {   // todo: check if supplier exists first
             if(!new UsersDAO(conn).userExists(Integer.parseInt(userId.getText()))) {

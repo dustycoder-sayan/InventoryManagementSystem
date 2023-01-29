@@ -39,25 +39,34 @@ public class AddSupplier {
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
+        Label nameLabel = new Label("Supplier Name: ");
+        nameLabel.setFont(new Font("Arial", 15));
+        grid.add(nameLabel, 0, 1);
+
         TextField supplierName = new TextField();
-        supplierName.setPromptText("Supplier Name");
-        grid.add(supplierName, 0, 1);
+        grid.add(supplierName, 1, 1);
+
+        Label contactLabel = new Label("Supplier Contact: ");
+        contactLabel.setFont(new Font("Arial", 15));
+        grid.add(contactLabel, 0, 2);
 
         TextField supplierPhone = new TextField();
-        supplierPhone.setPromptText("Supplier Contact");
-        grid.add(supplierPhone, 1, 1);
+        grid.add(supplierPhone, 1, 2);
+
+        Label locationLabel = new Label("Supplier Location: ");
+        locationLabel.setFont(new Font("Arial", 15));
+        grid.add(locationLabel, 0, 3);
 
         TextField supplierLocation = new TextField();
-        supplierLocation.setPromptText("Supplier Location");
-        grid.add(supplierLocation, 0, 2);
+        grid.add(supplierLocation, 1, 3);
 
         Button submit = new Button("Submit");
         submit.setFont(new Font("Arial", 15));
         submit.setTextFill(Color.DARKCYAN);
         HBox hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.CENTER_LEFT);
+        hbBtn.setAlignment(Pos.CENTER);
         hbBtn.getChildren().add(submit);
-        grid.add(hbBtn, 0, 4);
+        grid.add(hbBtn, 1, 5);
 
         submit.setOnAction(e -> {
             int sId = new Admin(conn, "dummy.xyz").insertSupplier(supplierName.getText(), supplierPhone.getText(), supplierLocation.getText());

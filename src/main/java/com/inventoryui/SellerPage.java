@@ -15,6 +15,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
@@ -24,11 +25,12 @@ public class SellerPage {
     private Label nameLabel, userName, userUsername, userCategory, userPhone, userLocation, userTotalEarnings, userTotalProfitLabel, userTotalEarningsLabel, userTotalProfit;
     private TreeView<String> tree;
     private String username;
-    private Connection conn = ConnectionFactory.getInstance().open();
+    private Connection conn;
     private TextField productName, brandName;
 
-    public SellerPage(String username) {
+    public SellerPage(String username, Connection conn) {
         this.username = username;
+        this.conn = conn;
     }
 
     public Scene sellerScene(Stage stage) {
@@ -107,6 +109,7 @@ public class SellerPage {
         userTotalEarningsLabel = new Label("Total Sold: ");
         userTotalEarningsLabel.setPadding(new Insets(10, 10, 10, 10));
         userTotalEarningsLabel.setAlignment(Pos.CENTER);
+        userTotalEarningsLabel.setFont(Font.font("Times New Roman", FontWeight.BOLD, 15));
 
         double totalEarnings = new Seller(conn, username).getTotalEarnings();
         if(totalEarnings == -1)
@@ -115,18 +118,7 @@ public class SellerPage {
         userTotalEarnings = new Label(String.valueOf(totalEarnings));
         userTotalEarnings.setPadding(new Insets(10, 10, 10, 10));
         userTotalEarnings.setAlignment(Pos.CENTER);
-
-        userTotalProfitLabel = new Label("Total Profit Earned: ");
-        userTotalProfitLabel.setPadding(new Insets(10, 10, 10, 10));
-        userTotalProfitLabel.setAlignment(Pos.CENTER);
-
-        double totalProfit = new Seller(conn, username).getTotalProfit();
-        if(totalProfit == -1)
-            totalProfit=0;
-
-        userTotalProfit = new Label(String.valueOf(totalProfit));
-        userTotalProfit.setPadding(new Insets(10, 10, 10, 10));
-        userTotalProfit.setAlignment(Pos.CENTER);
+        userTotalEarnings.setFont(Font.font("Times New Roman", FontWeight.BOLD, 15));
 
         HBox spacing = new HBox();
         spacing.setMinHeight(50);
@@ -136,7 +128,7 @@ public class SellerPage {
                 CornerRadii.EMPTY, Insets.EMPTY)));
         right.setMinWidth(250);
         right.getChildren().addAll(userName, userCategory, userUsername, userPhone, userLocation, userTotalEarningsLabel,
-                userTotalEarnings, userTotalProfitLabel, userTotalProfit);
+                userTotalEarnings);
         right.setAlignment(Pos.TOP_CENTER);
         right.setBorder(new Border(new BorderStroke(Color.LIGHTBLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
         layout.setRight(right);

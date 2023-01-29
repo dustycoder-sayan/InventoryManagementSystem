@@ -23,11 +23,12 @@ public class AdminPage {
     private Label nameLabel, userName, userUsername, userCategory, userPhone, userLocation;
     private TreeView<String> tree;
     private String username;
-    private Connection conn = ConnectionFactory.getInstance().open();
+    private Connection conn;
     private TextField productName, brandName;
 
-    public AdminPage(String username) {
+    public AdminPage(String username, Connection conn) {
         this.username = username;
+        this.conn = conn;
     }
 
     public Scene adminScene(Stage stage) {
@@ -55,24 +56,24 @@ public class AdminPage {
         root.setExpanded(true);
 
         products = makeBranch("Products", root);
+        makeBranch("View All Products", products);
+        makeBranch("Products Most Sold", products);
         makeBranch("Add New Product", products);
         makeBranch("Update Stock", products);
         makeBranch("Delete Product", products);
-        makeBranch("View All Products", products);
-        makeBranch("Products Most Sold", products);
 
         suppliers = makeBranch("Suppliers", root);
+        makeBranch("View All Suppliers", suppliers);
         makeBranch("Add New Supplier", suppliers);
         makeBranch("Update Supplier", suppliers);
         makeBranch("Delete Supplier", suppliers);
-        makeBranch("View All Suppliers", suppliers);
 
         users = makeBranch("Employees", root);
+        makeBranch("View All Employees", users);
+        makeBranch("Most Sold", users);
         makeBranch("Add New Employee", users);
         makeBranch("Update Employee", users);
         makeBranch("Delete Employee", users);
-        makeBranch("View All Employees", users);
-        makeBranch("Most Sold", users);
 
         customers = makeBranch("Customers", root);
         makeBranch("View All Customers", customers);

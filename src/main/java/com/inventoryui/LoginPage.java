@@ -35,7 +35,7 @@ public class LoginPage extends Application {
     public void init() throws Exception {
         super.init();
         try {
-            ConnectionFactory.getInstance().open(); }
+            connection = ConnectionFactory.getInstance().open(); }
         catch (Exception e) {
             AlertBox.alert("App Error", "FATAL ERROR");
             Platform.exit();
@@ -101,9 +101,9 @@ public class LoginPage extends Application {
                 actiontarget.setText("Wrong Username or Password");
             }
             else if(category.equalsIgnoreCase("Admin"))
-                primaryStage.setScene(new AdminPage(userTextField.getText()).adminScene(primaryStage));
+                primaryStage.setScene(new AdminPage(userTextField.getText(),connection).adminScene(primaryStage));
             else if(category.equalsIgnoreCase("Seller"))
-                primaryStage.setScene(new SellerPage(userTextField.getText()).sellerScene(primaryStage));
+                primaryStage.setScene(new SellerPage(userTextField.getText(),connection).sellerScene(primaryStage));
         });
         scene = new Scene(grid, 600, 600);
         primaryStage.setScene(scene);

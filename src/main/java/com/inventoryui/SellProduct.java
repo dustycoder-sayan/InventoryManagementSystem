@@ -43,33 +43,48 @@ public class SellProduct {
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
+        Label custNameLabel = new Label("Customer Name:");
+        custNameLabel.setFont(new Font("Arial", 15));
+        grid.add(custNameLabel, 0, 1);
+
         TextField custName = new TextField();
-        custName.setPromptText("Customer Name");
-        grid.add(custName, 0, 1);
+        grid.add(custName, 1, 1);
+
+        Label custContactLabel = new Label("Customer Contact No:");
+        custContactLabel.setFont(new Font("Arial", 15));
+        grid.add(custContactLabel, 0, 2);
 
         TextField custContact = new TextField();
-        custContact.setPromptText("Customer Contact");
-        grid.add(custContact, 1, 1);
+        grid.add(custContact, 1, 2);
+
+        Label custLocationLabel = new Label("Customer Location:");
+        custLocationLabel.setFont(new Font("Arial", 15));
+        grid.add(custLocationLabel, 0, 3);
 
         TextField custLocation = new TextField();
-        custLocation.setPromptText("Customer Location");
-        grid.add(custLocation, 0, 2);
+        grid.add(custLocation, 1, 3);
+
+        Label prodIdLabel = new Label("Product ID:");
+        prodIdLabel.setFont(new Font("Arial", 15));
+        grid.add(prodIdLabel, 0, 4);
 
         TextField prodId = new TextField();
-        prodId.setPromptText("Product ID");
-        grid.add(prodId, 0, 3);
+        grid.add(prodId, 1, 4);
+
+        Label quantityLabel = new Label("Quantity:");
+        quantityLabel.setFont(new Font("Arial", 15));
+        grid.add(quantityLabel, 0, 5);
 
         TextField quantity = new TextField();
-        quantity.setPromptText("Quantity");
-        grid.add(quantity, 1, 3);
+        grid.add(quantity, 1, 5);
 
         Button submit = new Button("Submit");
         submit.setFont(new Font("Arial", 15));
         submit.setTextFill(Color.DARKCYAN);
         HBox hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.CENTER_LEFT);
+        hbBtn.setAlignment(Pos.CENTER);
         hbBtn.getChildren().add(submit);
-        grid.add(hbBtn, 0, 4);
+        grid.add(hbBtn, 1, 7);
 
         submit.setOnAction(e -> {
             CustomerDTO customerDTO = new CustomerDTO();

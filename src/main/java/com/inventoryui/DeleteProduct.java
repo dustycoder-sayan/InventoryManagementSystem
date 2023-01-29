@@ -39,51 +39,31 @@ public class DeleteProduct {
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
-        TextField name = new TextField();
-        name.setPromptText("Product Name");
-        grid.add(name, 0, 1);
+        Label prodIdLabel = new Label("Product ID: ");
+        prodIdLabel.setFont(new Font("Arial", 15));
+        grid.add(prodIdLabel, 0, 1);
 
-        TextField brand = new TextField();
-        brand.setPromptText("Product Brand");
-        grid.add(brand, 1, 1);
-
-        TextField supplierName = new TextField();
-        supplierName.setPromptText("Supplier Name");
-        grid.add(supplierName, 0, 2);
-
-        TextField supplierPhone = new TextField();
-        supplierPhone.setPromptText("Supplier Number");
-        grid.add(supplierPhone, 1, 2);
+        TextField prodId = new TextField();
+        grid.add(prodId, 1, 1);
 
         Button submit = new Button("Delete");
         submit.setFont(new Font("Arial", 15));
         submit.setTextFill(Color.RED);
         HBox hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.CENTER_LEFT);
+        hbBtn.setAlignment(Pos.CENTER);
         hbBtn.getChildren().add(submit);
-        grid.add(hbBtn, 0, 4);
+        grid.add(hbBtn, 1, 3);
 
         // TODO: Complete function to delete Product. Check if Product exists first
         submit.setOnAction(e -> {
-            String supName = supplierName.getText();
-            String supPhone = supplierPhone.getText();
-            String prodName = name.getText();
-            String prodBrand = brand.getText();
-
-            int sId = new SuppliersDAO(conn).getSupplierId(supName, supPhone);
-            if(sId == -1) {
-                AlertBox2.alert("Unsuccessful", "Product Not found");
-                primaryStage.close();
-                return;
-            }
-            int pId = new ProductsDAO(conn).getProductId(prodName, prodBrand, sId);
-            if(pId == -1) {
+            boolean prodExists = new ProductsDAO(conn).productExists(Integer.parseInt(prodId.getText()));
+            if(!prodExists) {
                 AlertBox2.alert("Unsuccessful", "Product Not found");
                 primaryStage.close();
                 return;
             }
 
-            boolean deleted = new Admin(conn, "dummy.xyz").deleteProduct(prodName, prodBrand, supName, supPhone);
+            boolean deleted = new Admin(conn, "dummy.xyz").deleteProduct(Integer.parseInt(prodId.getText()));
             if(deleted) {
                 AlertBox2.alert("Successful", "Product Deleted Successfully");
                 primaryStage.close();

@@ -30,10 +30,9 @@ public class UpdateStock {
         this.conn = conn;
     }
 
-    public static void start() {
+    public void start() {
         Stage primaryStage = new Stage();
 //        primaryStage.initModality(Modality.APPLICATION_MODAL);
-        Connection conn = ConnectionFactory.getInstance().open();
         primaryStage.setTitle("Update Stock");
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -41,82 +40,45 @@ public class UpdateStock {
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
-        TextField name = new TextField();
-        name.setPromptText("Product Name");
-        grid.add(name, 0, 1);
+        Label prodIdLabel = new Label("Product ID: ");
+        prodIdLabel.setFont(new Font("Arial", 15));
+        grid.add(prodIdLabel, 0, 1);
 
-        TextField brand = new TextField();
-        brand.setPromptText("Product Brand");
-        grid.add(brand, 1, 1);
+        TextField prodId = new TextField();
+        grid.add(prodId, 1, 1);
 
-        TextField supplierName = new TextField();
-        supplierName.setPromptText("Supplier Name");
-        grid.add(supplierName, 0, 2);
-
-        TextField supplierPhone = new TextField();
-        supplierPhone.setPromptText("Supplier Number");
-        grid.add(supplierPhone, 1, 2);
+        Label stockLabel = new Label("New Stock: ");
+        stockLabel.setFont(new Font("Arial", 15));
+        grid.add(stockLabel, 0, 2);
 
         TextField stock = new TextField();
-        stock.setPromptText("New Stock");
-        HBox stck = new HBox(10);
-        stck.setAlignment(Pos.CENTER);
-        stck.getChildren().add(stock);
-        grid.add(stck, 0, 3);
+        grid.add(stock, 1, 2);
 
         Button submit = new Button("Submit");
         submit.setFont(new Font("Arial", 15));
         submit.setTextFill(Color.DARKCYAN);
         HBox hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.CENTER_LEFT);
+        hbBtn.setAlignment(Pos.CENTER);
         hbBtn.getChildren().add(submit);
-        grid.add(hbBtn, 0, 5);
+        grid.add(hbBtn, 1, 4);
 
         submit.setOnAction(e -> {
-            int sId;
-            if(!new SuppliersDAO(conn).supplierExists(supplierName.getText(), supplierPhone.getText())) {
-                AlertBox2.alert("Unsuccessful", "Supplier Not found");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
-                primaryStage.close();
-                return;
-            }
-            sId = new SuppliersDAO(conn).getSupplierId(supplierName.getText(), supplierPhone.getText());
-            if(!new ProductsDAO(conn).productExists(name.getText(), brand.getText(), sId)) {
+            if(!new ProductsDAO(conn).productExists(Integer.parseInt(prodId.getText()))) {
                 AlertBox2.alert("Unsuccessful", "Product Not found");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
                 primaryStage.close();
                 return;
             }
 
             Admin admin = new Admin(conn, "dummy");
-            boolean updated = admin.updateStock(
-                    name.getText(), brand.getText(), supplierName.getText(), supplierPhone.getText(),
+            boolean updated = new ProductsDAO(conn).addStock(Integer.parseInt(prodId.getText()),
                     Integer.parseInt(stock.getText()), new java.sql.Date(System.currentTimeMillis()).toString());
 
             if(updated) {
                 AlertBox2.alert("Successful", "Product Stock Updated Successfully");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
                 primaryStage.close();
             }
             else {
                 AlertBox2.alert("Unsuccessful", "Stock Could not be Updated");
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
                 primaryStage.close();
             }
         });

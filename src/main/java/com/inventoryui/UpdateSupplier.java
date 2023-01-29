@@ -41,38 +41,45 @@ public class UpdateSupplier {
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
-        TextField supplierName = new TextField();
-        supplierName.setPromptText("Supplier Name");
-        grid.add(supplierName, 0, 1);
+        Label supIdLabel = new Label("Supplier ID: ");
+        supIdLabel.setFont(new Font("Arial", 15));
+        grid.add(supIdLabel, 0, 1);
+
+        TextField supplierId = new TextField();
+        grid.add(supplierId, 1, 1);
+
+        Label contactLabel = new Label("Supplier Contact: ");
+        contactLabel.setFont(new Font("Arial", 15));
+        grid.add(contactLabel, 0, 2);
+
+        TextField supplierNewPhone = new TextField();
+        supplierNewPhone.setPromptText("Supplier Contact");
+        grid.add(supplierNewPhone, 1, 2);
+
+        Label supplierLocationLabel = new Label("Supplier ID: ");
+        supplierLocationLabel.setFont(new Font("Arial", 15));
+        grid.add(supplierLocationLabel, 0, 3);
 
         TextField supplierLocation = new TextField();
         supplierLocation.setPromptText("Supplier Location");
-        grid.add(supplierLocation, 1, 1);
-
-        TextField supplierOldPhone = new TextField();
-        supplierOldPhone.setPromptText("Supplier Prev Contact");
-        grid.add(supplierOldPhone, 0, 2);
-
-        TextField supplierNewPhone = new TextField();
-        supplierNewPhone.setPromptText("Supplier Current Contact");
-        grid.add(supplierNewPhone, 1, 2);
+        grid.add(supplierLocation, 1, 3);
 
         Button submit = new Button("Submit");
         submit.setFont(new Font("Arial", 15));
         submit.setTextFill(Color.DARKCYAN);
         HBox hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.CENTER_LEFT);
+        hbBtn.setAlignment(Pos.CENTER);
         hbBtn.getChildren().add(submit);
-        grid.add(hbBtn, 0, 4);
+        grid.add(hbBtn, 1, 5);
 
         submit.setOnAction(e -> {   // todo: check if supplier exists first
-            if(!new SuppliersDAO(conn).supplierExists(supplierName.getText(), supplierOldPhone.getText())) {
+            if(!new SuppliersDAO(conn).supplierExists(Integer.parseInt(supplierId.getText()))) {
                 AlertBox2.alert("Unsuccessful", "Supplier Not found");
                 primaryStage.close();
                 return;
             }
 
-            boolean updated = new Admin(conn, "dummy.xyz").updateSupplier(supplierName.getText(), supplierOldPhone.getText(),
+            boolean updated = new Admin(conn, "dummy.xyz").updateSupplier(Integer.parseInt(supplierId.getText()),
                     supplierNewPhone.getText(), supplierLocation.getText());
 
             if(!updated) {
