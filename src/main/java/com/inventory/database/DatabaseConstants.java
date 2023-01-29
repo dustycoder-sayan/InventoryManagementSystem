@@ -9,7 +9,6 @@ public interface DatabaseConstants {
     String ISSUE_PRODUCT_TABLE = "ISSUE_PRODUCT";
     String PRODUCTS_TABLE = "PRODUCTS";
     String SUPPLIERS_TABLE = "SUPPLIERS";
-    String TRANSACTIONS_TABLE = "TRANSACTIONS";
     String USERS_TABLE = "USERS";
 
     String CUSTOMER_ID = "C_ID";
@@ -36,15 +35,6 @@ public interface DatabaseConstants {
     String SUPPLIERS_NAME = "S_NAME";
     String SUPPLIERS_PHONE = "S_PHONE";
     String SUPPLIERS_LOCATION = "S_LOCATION";
-
-    String TRANSACTIONS_ID = "T_ID";
-    String TRANSACTIONS_C_ID = "C_ID";
-    String TRANSACTIONS_PROD_AMT = "PROD_AMT";
-    String TRANSACTIONS_DISCOUNT = "DISCOUNT";
-    String TRANSACTIONS_GST = "GST";
-    String TRANSACTIONS_TOTAL_AMT = "TOTAL_AMT";
-    String TRANSACTIONS_METHOD = "METHOD";
-    String TRANSACTIONS_DATE = "DATE";
 
     String USERS_ID = "U_ID";
     String USERS_USERNAME = "USERNAME";
