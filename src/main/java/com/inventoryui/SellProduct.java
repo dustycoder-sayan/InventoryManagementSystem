@@ -17,10 +17,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
@@ -30,9 +30,13 @@ public class SellProduct {
     // TODO: This program has to use main connection to get username of user
     private String username;
     private Connection conn;
-    public SellProduct(String username, Connection conn) {
+    private BorderPane layout;
+    private Label userUsername, userCategory, userTotalEarnings, userTotalEarningsLabel;
+
+    public SellProduct(String username, Connection conn, BorderPane layout) {
         this.username = username;
         this.conn = conn;
+        this.layout = layout;
     }
 
     public void start() {
@@ -120,6 +124,51 @@ public class SellProduct {
                 int uId = new UsersDAO(conn).getUserId(username);
                 boolean sold = new Seller(conn, username).sellProduct(Integer.parseInt(prodId.getText()), custId, uId, Integer.parseInt(quantity.getText()));
                 if (sold) {
+                    Label about = new Label("Personal Details");    // TODO: If possible, Image of User
+                    about.setPadding(new Insets(10, 10, 10, 10));
+                    Label userName1 = new Label(new Seller(conn, username).getSellerFullName());  // Todo: Get all from table
+                    userName1.setPadding(new Insets(20, 10, 10, 10));
+                    userName1.setAlignment(Pos.CENTER);
+                    userName1.setFont(new Font("Calibri", 20));
+                    userUsername = new Label(username);
+                    userUsername.setPadding(new Insets(10, 10, 10, 10));
+                    userUsername.setAlignment(Pos.CENTER);
+                    userCategory = new Label("Seller");
+                    userCategory.setPadding(new Insets(10, 10, 10, 10));
+                    userCategory.setAlignment(Pos.CENTER);
+                    Label userPhone1 = new Label(new Seller(conn,username).getSellerPhone());
+                    userPhone1.setPadding(new Insets(10, 10, 10, 10));
+                    userPhone1.setAlignment(Pos.CENTER);
+                    Label userLocation1 = new Label(new Seller(conn,username).getSellerLocation());
+                    userLocation1.setPadding(new Insets(10, 10, 10, 10));
+                    userLocation1.setAlignment(Pos.CENTER);
+
+                    userTotalEarningsLabel = new Label("Total Sold: ");
+                    userTotalEarningsLabel.setPadding(new Insets(10, 10, 10, 10));
+                    userTotalEarningsLabel.setAlignment(Pos.CENTER);
+                    userTotalEarningsLabel.setFont(Font.font("Times New Roman", FontWeight.BOLD, 15));
+
+                    double totalEarnings = new Seller(conn, username).getTotalEarnings();
+                    if(totalEarnings == -1)
+                        totalEarnings=0;
+
+                    userTotalEarnings = new Label(String.valueOf(totalEarnings));
+                    userTotalEarnings.setPadding(new Insets(10, 10, 10, 10));
+                    userTotalEarnings.setAlignment(Pos.CENTER);
+                    userTotalEarnings.setFont(Font.font("Times New Roman", FontWeight.BOLD, 15));
+
+                    HBox spacing = new HBox();
+                    spacing.setMinHeight(50);
+                    VBox right = new VBox(20);
+                    right.setMinHeight(775);
+                    right.setBackground(new Background(new BackgroundFill(Color.WHITE,
+                            CornerRadii.EMPTY, Insets.EMPTY)));
+                    right.setMinWidth(250);
+                    right.getChildren().addAll(userName1, userCategory, userUsername, userPhone1, userLocation1, userTotalEarningsLabel,
+                            userTotalEarnings);
+                    right.setAlignment(Pos.TOP_CENTER);
+                    right.setBorder(new Border(new BorderStroke(Color.LIGHTBLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
+                    layout.setRight(right);
                     AlertBox2.alert("Successful", "Product Sold Successfully");
                     primaryStage.close();
                 } else {

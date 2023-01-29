@@ -7,10 +7,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
@@ -18,10 +18,13 @@ import java.sql.Connection;
 public class UpdateAdminDetails {
     private String username;
     private Connection conn;
+    private BorderPane layout;
+    private Label userUsername, userCategory, userTotalEarningsLabel, userTotalEarnings;
 
-    public UpdateAdminDetails(String username, Connection conn) {
+    public UpdateAdminDetails(String username, Connection conn, BorderPane layout) {
         this.username = username;
         this.conn = conn;
+        this.layout = layout;
     }
 
     public void start() {
@@ -74,6 +77,52 @@ public class UpdateAdminDetails {
                     AlertBox2.alert("Unsuccessful", "FATAL ERROR: Could not Update Details");
                     primaryStage.close();
                 } else {
+                    Label about = new Label("Personal Details");
+                    about.setPadding(new Insets(10, 10, 10, 10));
+                    Label userName1 = new Label(new Admin(conn, username).getAdminFullName());
+                    userName1.setPadding(new Insets(20, 10, 10, 10));
+                    userName1.setAlignment(Pos.CENTER);
+                    userName1.setFont(new Font("Calibri", 20));
+                    userUsername = new Label(username);
+                    userUsername.setPadding(new Insets(10, 10, 10, 10));
+                    userUsername.setAlignment(Pos.CENTER);
+                    userCategory = new Label("Admin");
+                    userCategory.setPadding(new Insets(10, 10, 10, 10));
+                    userCategory.setAlignment(Pos.CENTER);
+                    Label userPhone1 = new Label(new Admin(conn, username).getAdminPhone());
+                    userPhone1.setPadding(new Insets(10, 10, 10, 10));
+                    userPhone1.setAlignment(Pos.CENTER);
+                    Label userLocation1 = new Label(new Admin(conn, username).getAdminLocation());
+                    userLocation1.setPadding(new Insets(10, 10, 10, 10));
+                    userLocation1.setAlignment(Pos.CENTER);
+
+                    userTotalEarningsLabel = new Label("Total Sales: ");
+                    userTotalEarningsLabel.setPadding(new Insets(10, 10, 10, 10));
+                    userTotalEarningsLabel.setAlignment(Pos.CENTER);
+                    userTotalEarningsLabel.setFont(Font.font("Times New Roman", FontWeight.BOLD, 15));
+
+                    double totalEarnings = new Admin(conn, username).getTotalSales();
+                    if(totalEarnings == -1)
+                        totalEarnings=0;
+
+                    userTotalEarnings = new Label(String.valueOf(totalEarnings));
+                    userTotalEarnings.setPadding(new Insets(10, 10, 10, 10));
+                    userTotalEarnings.setAlignment(Pos.CENTER);
+                    userTotalEarnings.setFont(Font.font("Times New Roman", FontWeight.BOLD, 15));
+
+                    HBox spacing = new HBox();
+                    spacing.setMinHeight(50);
+                    VBox right = new VBox(20);
+                    right.setMinHeight(775);
+                    right.setBackground(new Background(new BackgroundFill(Color.WHITE,
+                            CornerRadii.EMPTY, Insets.EMPTY)));
+                    right.setMinWidth(250);
+                    right.getChildren().addAll(userName1, userCategory, userUsername, userPhone1, userLocation1,
+                            userTotalEarningsLabel, userTotalEarnings);
+                    right.setAlignment(Pos.TOP_CENTER);
+                    right.setBorder(new Border(new BorderStroke(Color.LIGHTBLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
+                            new BorderWidths(3))));
+                    layout.setRight(right);
                     AlertBox2.alert("Successful", "Details Updated Successfully");
                     primaryStage.close();
                 }

@@ -156,10 +156,10 @@ public class SellerPage {
                 layout.setCenter(table1);
             }
             else if(valueSelected.equals("Sell")) {
-                new SellProduct(username, conn).start();
+                new SellProduct(username, conn, layout).start();
             }
             else if(valueSelected.equalsIgnoreCase("Update Details")) {
-                new UpdateSellerDetails(username, conn).start();
+                new UpdateSellerDetails(username, conn, layout).start();
             }
             else if(valueSelected.equalsIgnoreCase("Update Password")) {
                 new PasswordUpdate(username, conn).start();

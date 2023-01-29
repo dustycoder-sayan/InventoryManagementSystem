@@ -74,6 +74,7 @@ public class CustomerDAO implements DatabaseConstants {
         if (customerExists(customer.getCustomerName(), customer.getCustomerPhone()))  // return custId if already exists
             return getCustomerId(customer.getCustomerName(), customer.getCustomerPhone());
 
+
         // Add new customer if not exists
         PreparedStatement addCustomer = conn.prepareStatement(ADD_TO_CUSTOMER);
         addCustomer.setString(1, customer.getCustomerName());

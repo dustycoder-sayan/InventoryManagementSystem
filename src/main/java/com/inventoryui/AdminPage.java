@@ -214,7 +214,7 @@ public class AdminPage {
                 new DeleteUser(conn).start();
             }
             else if(valueSelected.equalsIgnoreCase("Update Details")) {
-                new UpdateAdminDetails(username, conn).start();
+                new UpdateAdminDetails(username, conn, layout).start();
             }
             else if(valueSelected.equalsIgnoreCase("Update Password")) {
                 new PasswordUpdate(username, conn).start();
