@@ -335,7 +335,7 @@ public class AdminPage {
         prodBrand.setMinWidth(230);
         prodBrand.setStyle( "-fx-alignment: CENTER;");
 
-        TableColumn<ProductsDTO, Integer> totalSales = new TableColumn<>("Sold");
+        TableColumn<ProductsDTO, Integer> totalSales = new TableColumn<>("Sales");
         totalSales.setCellValueFactory(new PropertyValueFactory<>("totalSales"));
         totalSales.setMinWidth(240);
         totalSales.setStyle( "-fx-alignment: CENTER;");
