@@ -2,6 +2,7 @@ package com.inventoryui;
 
 import com.inventory.DTO.*;
 import com.inventory.DataSource.Admin;
+import com.inventory.DataSource.Seller;
 import com.inventory.database.ConnectionFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,13 +15,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
 
 public class AdminPage {
 
-    private Label nameLabel, userName, userUsername, userCategory, userPhone, userLocation;
+    private Label nameLabel, userName, userUsername, userCategory, userPhone, userLocation, userTotalEarningsLabel, userTotalEarnings;
     private TreeView<String> tree;
     private String username;
     private Connection conn;
@@ -118,6 +120,20 @@ public class AdminPage {
         userLocation.setPadding(new Insets(10, 10, 10, 10));
         userLocation.setAlignment(Pos.CENTER);
 
+        userTotalEarningsLabel = new Label("Total Sales: ");
+        userTotalEarningsLabel.setPadding(new Insets(10, 10, 10, 10));
+        userTotalEarningsLabel.setAlignment(Pos.CENTER);
+        userTotalEarningsLabel.setFont(Font.font("Times New Roman", FontWeight.BOLD, 15));
+
+        double totalEarnings = new Admin(conn, username).getTotalSales();
+        if(totalEarnings == -1)
+            totalEarnings=0;
+
+        userTotalEarnings = new Label(String.valueOf(totalEarnings));
+        userTotalEarnings.setPadding(new Insets(10, 10, 10, 10));
+        userTotalEarnings.setAlignment(Pos.CENTER);
+        userTotalEarnings.setFont(Font.font("Times New Roman", FontWeight.BOLD, 15));
+
         HBox spacing = new HBox();
         spacing.setMinHeight(50);
         VBox right = new VBox(20);
@@ -125,7 +141,8 @@ public class AdminPage {
         right.setBackground(new Background(new BackgroundFill(Color.WHITE,
                 CornerRadii.EMPTY, Insets.EMPTY)));
         right.setMinWidth(250);
-        right.getChildren().addAll(userName, userCategory, userUsername, userPhone, userLocation);
+        right.getChildren().addAll(userName, userCategory, userUsername, userPhone, userLocation,
+                userTotalEarningsLabel, userTotalEarnings);
         right.setAlignment(Pos.TOP_CENTER);
         right.setBorder(new Border(new BorderStroke(Color.LIGHTBLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
                 new BorderWidths(3))));

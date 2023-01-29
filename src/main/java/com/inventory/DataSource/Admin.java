@@ -588,6 +588,22 @@ public class Admin implements DatabaseConstants {
             return false;
         }
     }
+
+    public double getTotalSales() {
+        final String TOTAL_SALES = "SELECT SUM(IP.QUANTITY*P.SELLING_PRICE)\n" +
+                "FROM ISSUE_PRODUCT IP, PRODUCTS P\n" +
+                "WHERE P.P_ID = IP.P_ID;";
+        try {
+            PreparedStatement totalSales = conn.prepareStatement(TOTAL_SALES);
+            ResultSet result = totalSales.executeQuery();
+            if(result.next())
+                return result.getDouble(1);
+            throw new SQLException("No Sales");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return -1;
+        }
+    }
 }
 // TODO: Definitely to be done - Add code to delete user, supplier, product
 // TODO: Only if Time Permits:- Get Sales by Location
