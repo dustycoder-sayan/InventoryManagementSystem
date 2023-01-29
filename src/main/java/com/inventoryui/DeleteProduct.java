@@ -56,20 +56,24 @@ public class DeleteProduct {
 
         // TODO: Complete function to delete Product. Check if Product exists first
         submit.setOnAction(e -> {
-            boolean prodExists = new ProductsDAO(conn).productExists(Integer.parseInt(prodId.getText()));
-            if(!prodExists) {
-                AlertBox2.alert("Unsuccessful", "Product Not found");
-                primaryStage.close();
-                return;
-            }
+            try {
+                boolean prodExists = new ProductsDAO(conn).productExists(Integer.parseInt(prodId.getText()));
+                if (!prodExists) {
+                    AlertBox2.alert("Unsuccessful", "Product Not found");
+                    primaryStage.close();
+                    return;
+                }
 
-            boolean deleted = new Admin(conn, "dummy.xyz").deleteProduct(Integer.parseInt(prodId.getText()));
-            if(deleted) {
-                AlertBox2.alert("Successful", "Product Deleted Successfully");
-                primaryStage.close();
-            }
-            else {
-                AlertBox2.alert("Unsuccessful", "Product Could Not be Deleted");
+                boolean deleted = new Admin(conn, "dummy.xyz").deleteProduct(Integer.parseInt(prodId.getText()));
+                if (deleted) {
+                    AlertBox2.alert("Successful", "Product Deleted Successfully");
+                    primaryStage.close();
+                } else {
+                    AlertBox2.alert("Unsuccessful", "Product Could Not be Deleted");
+                    primaryStage.close();
+                }
+            } catch (Exception ex) {
+                AlertBox2.alert("Unsuccessful", "Wrong Value Made");
                 primaryStage.close();
             }
         });

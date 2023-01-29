@@ -69,12 +69,17 @@ public class AddSupplier {
         grid.add(hbBtn, 1, 5);
 
         submit.setOnAction(e -> {
-            int sId = new Admin(conn, "dummy.xyz").insertSupplier(supplierName.getText(), supplierPhone.getText(), supplierLocation.getText());
-            if(sId == -1) {
-                AlertBox2.alert("Unsuccessful", "Supplier Could not be Added");
-                primaryStage.close();
-            } else {
-                AlertBox2.alert("Successful", "Supplier Added Successfully");
+            try {
+                int sId = new Admin(conn, "dummy.xyz").insertSupplier(supplierName.getText(), supplierPhone.getText(), supplierLocation.getText());
+                if (sId == -1) {
+                    AlertBox2.alert("Unsuccessful", "Supplier Could not be Added");
+                    primaryStage.close();
+                } else {
+                    AlertBox2.alert("Successful", "Supplier Added Successfully");
+                    primaryStage.close();
+                }
+            } catch (Exception ex) {
+                AlertBox2.alert("Unsuccessful", "Wrong Value Made");
                 primaryStage.close();
             }
         });

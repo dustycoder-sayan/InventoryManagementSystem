@@ -88,41 +88,46 @@ public class SellProduct {
         grid.add(hbBtn, 1, 7);
 
         submit.setOnAction(e -> {
-            boolean stockAvailable=true;
             try {
-                stockAvailable = new ProductsDAO(conn).checkStock(Integer.parseInt(prodId.getText()), Integer.parseInt(quantity.getText()));
-            } catch (SQLException e1) {
-                System.out.println(e1.getMessage());
-            }
-            if(!stockAvailable) {
-                AlertBox2.alert("Unsuccessful", "Stock Insufficient");
-                primaryStage.close();
-                return;
-            }
+                boolean stockAvailable = true;
+                try {
+                    stockAvailable = new ProductsDAO(conn).checkStock(Integer.parseInt(prodId.getText()), Integer.parseInt(quantity.getText()));
+                } catch (SQLException e1) {
+                    System.out.println(e1.getMessage());
+                }
+                if (!stockAvailable) {
+                    AlertBox2.alert("Unsuccessful", "Stock Insufficient");
+                    primaryStage.close();
+                    return;
+                }
 
-            CustomerDTO customerDTO = new CustomerDTO();
-            customerDTO.setCustomerName(custName.getText());
-            customerDTO.setCustomerPhone(custContact.getText());
-            customerDTO.setCustomerLocation(custLocation.getText());
-            int custId=-1;
-            try {
-                custId = new CustomerDAO(conn).addCustomer(customerDTO);
-            } catch (SQLException e1) {
-                System.out.println(e1.getMessage());
-            }
-            if(custId == -1) {
-                AlertBox2.alert("Unsuccessful", "Customer Could not be Added");
-                primaryStage.close();
-                return;
-            }
+                CustomerDTO customerDTO = new CustomerDTO();
+                customerDTO.setCustomerName(custName.getText());
+                customerDTO.setCustomerPhone(custContact.getText());
+                customerDTO.setCustomerLocation(custLocation.getText());
+                int custId = -1;
+                try {
+                    custId = new CustomerDAO(conn).addCustomer(customerDTO);
+                } catch (SQLException e1) {
+                    System.out.println(e1.getMessage());
+                }
+                if (custId == -1) {
+                    AlertBox2.alert("Unsuccessful", "Customer Could not be Added");
+                    primaryStage.close();
+                    return;
+                }
 
-            int uId = new UsersDAO(conn).getUserId(username);
-            boolean sold = new Seller(conn, username).sellProduct(Integer.parseInt(prodId.getText()), custId, uId, Integer.parseInt(quantity.getText()));
-            if(sold) {
-                AlertBox2.alert("Successful", "Product Sold Successfully");
-                primaryStage.close();
-            } else {
-                AlertBox2.alert("Unsuccessful", "Product Could not be sold");
+                int uId = new UsersDAO(conn).getUserId(username);
+                boolean sold = new Seller(conn, username).sellProduct(Integer.parseInt(prodId.getText()), custId, uId, Integer.parseInt(quantity.getText()));
+                if (sold) {
+                    AlertBox2.alert("Successful", "Product Sold Successfully");
+                    primaryStage.close();
+                } else {
+                    AlertBox2.alert("Unsuccessful", "Product Could not be sold");
+                    primaryStage.close();
+                }
+            } catch (Exception ex) {
+                AlertBox2.alert("Unsuccessful", "Wrong Value Made");
                 primaryStage.close();
             }
         });

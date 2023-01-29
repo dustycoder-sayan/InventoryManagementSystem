@@ -72,21 +72,26 @@ public class UpdateSupplier {
         hbBtn.getChildren().add(submit);
         grid.add(hbBtn, 1, 5);
 
-        submit.setOnAction(e -> {   // todo: check if supplier exists first
-            if(!new SuppliersDAO(conn).supplierExists(Integer.parseInt(supplierId.getText()))) {
-                AlertBox2.alert("Unsuccessful", "Supplier Not found");
-                primaryStage.close();
-                return;
-            }
+        submit.setOnAction(e -> {
+            try {
+                if (!new SuppliersDAO(conn).supplierExists(Integer.parseInt(supplierId.getText()))) {
+                    AlertBox2.alert("Unsuccessful", "Supplier Not found");
+                    primaryStage.close();
+                    return;
+                }
 
-            boolean updated = new Admin(conn, "dummy.xyz").updateSupplier(Integer.parseInt(supplierId.getText()),
-                    supplierNewPhone.getText(), supplierLocation.getText());
+                boolean updated = new Admin(conn, "dummy.xyz").updateSupplier(Integer.parseInt(supplierId.getText()),
+                        supplierNewPhone.getText(), supplierLocation.getText());
 
-            if(!updated) {
-                AlertBox2.alert("Unsuccessful", "Supplier Could not be Updated");
-                primaryStage.close();
-            } else {
-                AlertBox2.alert("Successful", "Supplier Updated Successfully");
+                if (!updated) {
+                    AlertBox2.alert("Unsuccessful", "Supplier Could not be Updated");
+                    primaryStage.close();
+                } else {
+                    AlertBox2.alert("Successful", "Supplier Updated Successfully");
+                    primaryStage.close();
+                }
+            } catch (Exception ex) {
+                AlertBox2.alert("Unsuccessful", "Wrong Value Made");
                 primaryStage.close();
             }
         });

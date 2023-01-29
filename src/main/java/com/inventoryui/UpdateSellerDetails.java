@@ -66,15 +66,20 @@ public class UpdateSellerDetails {
         grid.add(hbBtn, 1, 5);
 
         submit.setOnAction(e -> {
-            String userPhone = phone.getText();
-            String userLocation = location.getText();
+            try {
+                String userPhone = phone.getText();
+                String userLocation = location.getText();
 
-            boolean updated = new Seller(conn, username).updateUserDetails(userPhone, userLocation);
-            if(!updated) {
-                AlertBox2.alert("Unsuccessful", "FATAL ERROR: Could not Update Details");
-                primaryStage.close();
-            } else {
-                AlertBox2.alert("Successful", "Details Updated Successfully");
+                boolean updated = new Seller(conn, username).updateUserDetails(userPhone, userLocation);
+                if (!updated) {
+                    AlertBox2.alert("Unsuccessful", "FATAL ERROR: Could not Update Details");
+                    primaryStage.close();
+                } else {
+                    AlertBox2.alert("Successful", "Details Updated Successfully");
+                    primaryStage.close();
+                }
+            } catch (Exception ex) {
+                AlertBox2.alert("Unsuccessful", "Wrong Value Made");
                 primaryStage.close();
             }
         });

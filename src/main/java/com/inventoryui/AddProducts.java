@@ -115,7 +115,8 @@ public class AddProducts {
                     primaryStage.close();
                 }
             } catch (Exception ex) {
-                AlertBox2.alert("Unsuccessful", "Wrong Entries Made");
+                AlertBox2.alert("Unsuccessful", "Wrong Value Entered");
+                primaryStage.close();
             }
         });
 

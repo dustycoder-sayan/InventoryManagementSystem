@@ -77,27 +77,32 @@ public class UpdateUser {
         grid.add(hbBtn, 1, 6);
 
         submit.setOnAction(e -> {
-            String category = userCategory.getText();
-            if(!new UsersDAO(conn).userExists(Integer.parseInt(userId.getText()))) {
-                AlertBox2.alert("Unsuccessful", "User Not found");
-                primaryStage.close();
-                return;
-            }
-
-            if(category.equalsIgnoreCase("Admin") || category.equalsIgnoreCase("Seller") || category.equalsIgnoreCase("Analyst")) {
-                boolean updated = new Admin(conn, "xyz").updateAnotherUser(Integer.parseInt(userId.getText()),
-                        userPhone.getText(), userLocation.getText(),
-                        userCategory.getText());
-
-                if (!updated) {
-                    AlertBox2.alert("Unsuccessful", "User Could not be Updated");
+            try {
+                String category = userCategory.getText();
+                if (!new UsersDAO(conn).userExists(Integer.parseInt(userId.getText()))) {
+                    AlertBox2.alert("Unsuccessful", "User Not found");
                     primaryStage.close();
+                    return;
+                }
+
+                if (category.equalsIgnoreCase("Admin") || category.equalsIgnoreCase("Seller") || category.equalsIgnoreCase("Analyst")) {
+                    boolean updated = new Admin(conn, "xyz").updateAnotherUser(Integer.parseInt(userId.getText()),
+                            userPhone.getText(), userLocation.getText(),
+                            userCategory.getText());
+
+                    if (!updated) {
+                        AlertBox2.alert("Unsuccessful", "User Could not be Updated");
+                        primaryStage.close();
+                    } else {
+                        AlertBox2.alert("Successful", "User Updated Successfully");
+                        primaryStage.close();
+                    }
                 } else {
-                    AlertBox2.alert("Successful", "User Updated Successfully");
+                    AlertBox2.alert("Unsuccessful", "Category Non Existent");
                     primaryStage.close();
                 }
-            } else {
-                AlertBox2.alert("Unsuccessful", "Category Non Existent");
+            } catch (Exception ex) {
+                AlertBox2.alert("Unsuccessful", "Wrong Value Made");
                 primaryStage.close();
             }
         });

@@ -75,20 +75,24 @@ public class AddUser {
         grid.add(hbBtn, 1, 6);
 
         submit.setOnAction(e -> {
-
-            String category = userCategory.getText();
-            if(category.equalsIgnoreCase("Admin") || category.equalsIgnoreCase("Seller") || category.equalsIgnoreCase("Analyst")) {
-                int uId = new Admin(conn, "dummy.xyz").addNewUser(userName.getText(), userPhone.getText(), userLocation.getText(),
-                        userCategory.getText());
-                if(uId == -1) {
-                    AlertBox2.alert("Unsuccessful", "User Could not be Added");
-                    primaryStage.close();
+            try {
+                String category = userCategory.getText();
+                if (category.equalsIgnoreCase("Admin") || category.equalsIgnoreCase("Seller") || category.equalsIgnoreCase("Analyst")) {
+                    int uId = new Admin(conn, "dummy.xyz").addNewUser(userName.getText(), userPhone.getText(), userLocation.getText(),
+                            userCategory.getText());
+                    if (uId == -1) {
+                        AlertBox2.alert("Unsuccessful", "User Could not be Added");
+                        primaryStage.close();
+                    } else {
+                        AlertBox2.alert("Successful", "User Added Successfully");
+                        primaryStage.close();
+                    }
                 } else {
-                    AlertBox2.alert("Successful", "User Added Successfully");
+                    AlertBox2.alert("Unsuccessful", "Category Non Existent");
                     primaryStage.close();
                 }
-            } else {
-                AlertBox2.alert("Unsuccessful", "Category Non Existent");
+            } catch (Exception ex) {
+                AlertBox2.alert("Unsuccessful", "Wrong Value Made");
                 primaryStage.close();
             }
         });

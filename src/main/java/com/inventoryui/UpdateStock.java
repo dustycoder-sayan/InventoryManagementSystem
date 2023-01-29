@@ -63,22 +63,26 @@ public class UpdateStock {
         grid.add(hbBtn, 1, 4);
 
         submit.setOnAction(e -> {
-            if(!new ProductsDAO(conn).productExists(Integer.parseInt(prodId.getText()))) {
-                AlertBox2.alert("Unsuccessful", "Product Not found");
-                primaryStage.close();
-                return;
-            }
+            try {
+                if (!new ProductsDAO(conn).productExists(Integer.parseInt(prodId.getText()))) {
+                    AlertBox2.alert("Unsuccessful", "Product Not found");
+                    primaryStage.close();
+                    return;
+                }
 
-            Admin admin = new Admin(conn, "dummy");
-            boolean updated = new ProductsDAO(conn).addStock(Integer.parseInt(prodId.getText()),
-                    Integer.parseInt(stock.getText()), new java.sql.Date(System.currentTimeMillis()).toString());
+                Admin admin = new Admin(conn, "dummy");
+                boolean updated = new ProductsDAO(conn).addStock(Integer.parseInt(prodId.getText()),
+                        Integer.parseInt(stock.getText()), new java.sql.Date(System.currentTimeMillis()).toString());
 
-            if(updated) {
-                AlertBox2.alert("Successful", "Product Stock Updated Successfully");
-                primaryStage.close();
-            }
-            else {
-                AlertBox2.alert("Unsuccessful", "Stock Could not be Updated");
+                if (updated) {
+                    AlertBox2.alert("Successful", "Product Stock Updated Successfully");
+                    primaryStage.close();
+                } else {
+                    AlertBox2.alert("Unsuccessful", "Stock Could not be Updated");
+                    primaryStage.close();
+                }
+            } catch (Exception ex) {
+                AlertBox2.alert("Unsuccessful", "Wrong Value Made");
                 primaryStage.close();
             }
         });

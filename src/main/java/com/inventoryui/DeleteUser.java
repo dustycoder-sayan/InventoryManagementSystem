@@ -50,19 +50,24 @@ public class DeleteUser {
         hbBtn.getChildren().add(submit);
         grid.add(hbBtn, 1, 3);
 
-        submit.setOnAction(e -> {   // todo: check if supplier exists first
-            if(!new UsersDAO(conn).userExists(Integer.parseInt(userId.getText()))) {
-                AlertBox2.alert("Unsuccessful", "Employee Not found");
-                primaryStage.close();
-                return;
-            }
+        submit.setOnAction(e -> {
+            try {
+                if (!new UsersDAO(conn).userExists(Integer.parseInt(userId.getText()))) {
+                    AlertBox2.alert("Unsuccessful", "Employee Not found");
+                    primaryStage.close();
+                    return;
+                }
 
-            boolean deleted = new Admin(conn, "xyz").deleteUser(Integer.parseInt(userId.getText()));
-            if(!deleted) {
-                AlertBox2.alert("Unsuccessful", "Employee Could not be Deleted");
-                primaryStage.close();
-            } else {
-                AlertBox2.alert("Successful", "Employee Deleted Successfully");
+                boolean deleted = new Admin(conn, "xyz").deleteUser(Integer.parseInt(userId.getText()));
+                if (!deleted) {
+                    AlertBox2.alert("Unsuccessful", "Employee Could not be Deleted");
+                    primaryStage.close();
+                } else {
+                    AlertBox2.alert("Successful", "Employee Deleted Successfully");
+                    primaryStage.close();
+                }
+            } catch (Exception ex) {
+                AlertBox2.alert("Unsuccessful", "Wrong Value Made");
                 primaryStage.close();
             }
         });

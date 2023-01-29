@@ -78,13 +78,18 @@ public class UpdateCustomer {
         grid.add(hbBtn, 1, 6);
 
         submit.setOnAction(e -> {
-            boolean updated = new Seller(conn, "fgh").updateCustomer(customerName.getText(), customerOldPhone.getText(),
-                    customerNewPhone.getText(), customerLocation.getText());
-            if(!updated) {
-                AlertBox2.alert("Unsuccessful", "Customer Could not be Found");
-                primaryStage.close();
-            } else {
-                AlertBox2.alert("Successful", "Customer Added Successfully");
+            try {
+                boolean updated = new Seller(conn, "fgh").updateCustomer(customerName.getText(), customerOldPhone.getText(),
+                        customerNewPhone.getText(), customerLocation.getText());
+                if (!updated) {
+                    AlertBox2.alert("Unsuccessful", "Customer Could not be Found");
+                    primaryStage.close();
+                } else {
+                    AlertBox2.alert("Successful", "Customer Added Successfully");
+                    primaryStage.close();
+                }
+            } catch (Exception ex) {
+                AlertBox2.alert("Unsuccessful", "Wrong Value Made");
                 primaryStage.close();
             }
         });

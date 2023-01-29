@@ -55,16 +55,21 @@ public class DeleteSupplier {
         grid.add(hbBtn, 1, 3);
 
         submit.setOnAction(e -> {
-            if(!new SuppliersDAO(conn).supplierExists(Integer.parseInt(supId.getText()))) {
-                AlertBox2.alert("Unsuccessful", "Supplier Not found");
-            }
+            try {
+                if (!new SuppliersDAO(conn).supplierExists(Integer.parseInt(supId.getText()))) {
+                    AlertBox2.alert("Unsuccessful", "Supplier Not found");
+                }
 
-            boolean deleted = new Admin(conn,"xyz").deleteSupplier(Integer.parseInt(supId.getText()));
-            if(deleted) {
-                AlertBox2.alert("Successful", "Supplier Deleted Successfully");
-                primaryStage.close();
-            } else {
-                AlertBox2.alert("Unsuccessful", "Supplier Could not be Deleted");
+                boolean deleted = new Admin(conn, "xyz").deleteSupplier(Integer.parseInt(supId.getText()));
+                if (deleted) {
+                    AlertBox2.alert("Successful", "Supplier Deleted Successfully");
+                    primaryStage.close();
+                } else {
+                    AlertBox2.alert("Unsuccessful", "Supplier Could not be Deleted");
+                    primaryStage.close();
+                }
+            } catch (Exception ex) {
+                AlertBox2.alert("Unsuccessful", "Wrong Value Made");
                 primaryStage.close();
             }
         });
