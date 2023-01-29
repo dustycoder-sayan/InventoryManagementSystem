@@ -2,6 +2,7 @@ package com.inventoryui;
 
 import com.inventory.DAO.CustomerDAO;
 import com.inventory.DAO.IssueProductDAO;
+import com.inventory.DAO.ProductsDAO;
 import com.inventory.DAO.UsersDAO;
 import com.inventory.DTO.CustomerDTO;
 import com.inventory.DTO.IssueProductNamesDTO;
@@ -87,6 +88,18 @@ public class SellProduct {
         grid.add(hbBtn, 1, 7);
 
         submit.setOnAction(e -> {
+            boolean stockAvailable=true;
+            try {
+                stockAvailable = new ProductsDAO(conn).checkStock(Integer.parseInt(prodId.getText()), Integer.parseInt(quantity.getText()));
+            } catch (SQLException e1) {
+                System.out.println(e1.getMessage());
+            }
+            if(!stockAvailable) {
+                AlertBox2.alert("Unsuccessful", "Stock Insufficient");
+                primaryStage.close();
+                return;
+            }
+
             CustomerDTO customerDTO = new CustomerDTO();
             customerDTO.setCustomerName(custName.getText());
             customerDTO.setCustomerPhone(custContact.getText());
@@ -102,6 +115,7 @@ public class SellProduct {
                 primaryStage.close();
                 return;
             }
+
             int uId = new UsersDAO(conn).getUserId(username);
             boolean sold = new Seller(conn, username).sellProduct(Integer.parseInt(prodId.getText()), custId, uId, Integer.parseInt(quantity.getText()));
             if(sold) {
