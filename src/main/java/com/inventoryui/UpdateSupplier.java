@@ -56,7 +56,7 @@ public class UpdateSupplier {
         supplierNewPhone.setPromptText("Supplier Contact");
         grid.add(supplierNewPhone, 1, 2);
 
-        Label supplierLocationLabel = new Label("Supplier ID: ");
+        Label supplierLocationLabel = new Label("Supplier Location: ");
         supplierLocationLabel.setFont(new Font("Arial", 15));
         grid.add(supplierLocationLabel, 0, 3);
 
