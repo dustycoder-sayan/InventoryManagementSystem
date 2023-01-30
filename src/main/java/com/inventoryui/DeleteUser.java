@@ -2,7 +2,6 @@ package com.inventoryui;
 
 import com.inventory.DAO.UsersDAO;
 import com.inventory.DataSource.Admin;
-import com.inventory.database.ConnectionFactory;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -13,11 +12,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 public class DeleteUser {
     private final Connection conn;
@@ -27,7 +24,6 @@ public class DeleteUser {
 
     public void start() {
         Stage primaryStage = new Stage();
-//        primaryStage.initModality(Modality.APPLICATION_MODAL);
         primaryStage.setTitle("Delete Employee");
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);

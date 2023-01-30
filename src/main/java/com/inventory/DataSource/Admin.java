@@ -605,5 +605,3 @@ public class Admin implements DatabaseConstants {
         }
     }
 }
-// TODO: Definitely to be done - Add code to delete user, supplier, product
-// TODO: Only if Time Permits:- Get Sales by Location

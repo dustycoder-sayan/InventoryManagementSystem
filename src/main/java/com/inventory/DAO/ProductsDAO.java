@@ -160,38 +160,6 @@ public class ProductsDAO implements DatabaseConstants {
         }
     }
 
-    public boolean removeStock(int pId, int oldStock) {
-        // subtracts the oldStock from currentStock if pId Exists
-        final String QUERY_STOCK = "SELECT " + PRODUCTS_CURRENT_STOCK + " FROM " + PRODUCTS_TABLE + " WHERE "
-                + PRODUCTS_ID + "=?";
-        final String UPDATE_STOCK = "UPDATE " + PRODUCTS_TABLE + " SET " + PRODUCTS_CURRENT_STOCK + "=? WHERE " + PRODUCTS_ID + "=?";
-        try {
-            if (!productExists(pId))
-                throw new SQLException("Product Does not Exist");
-
-            if (!checkStock(pId, oldStock))
-                throw new SQLException("Not enough Stock");
-
-            PreparedStatement queryStock = conn.prepareStatement(QUERY_STOCK);
-            queryStock.setInt(1, pId);
-
-            int currentStock = queryStock.executeQuery().getInt(1);
-            currentStock -= oldStock;
-
-            PreparedStatement updateStock = conn.prepareStatement(UPDATE_STOCK);
-            updateStock.setInt(1, currentStock);
-            updateStock.setInt(2, pId);
-
-            int affectedRows = updateStock.executeUpdate();
-            if (affectedRows != 1)
-                throw new SQLException("More than one row affected");
-            return true;
-        } catch (SQLException e) {
-            System.out.println("Could not remove stock: " + e.getMessage());
-            return false;
-        }
-    }
-
     public boolean checkStock(int pId, int quantity) throws SQLException {
         final String QUERY_STOCK = "SELECT " + PRODUCTS_CURRENT_STOCK + " FROM " + PRODUCTS_TABLE + " WHERE "
                 + PRODUCTS_ID + "=?";
@@ -201,30 +169,5 @@ public class ProductsDAO implements DatabaseConstants {
         int currentStock = queryStock.executeQuery().getInt(1);
 
         return currentStock >= quantity;
-    }
-
-    public ResultSet getAllProductDetails() {
-        try {
-            PreparedStatement results = conn.prepareStatement("SELECT * FROM " + PRODUCTS_TABLE + " ORDER BY " + PRODUCTS_NAME + " COLLATE NOCASE");
-            if (!results.executeQuery().next())
-                throw new SQLException("No Such Product Exists");
-            return results.executeQuery();
-        } catch (SQLException e) {
-            System.out.println("Couldn't fetch Product Details: " + e.getMessage());
-            return null;
-        }
-    }
-
-    public ResultSet getProductDetails(String productName, String productBrand, int sId) {
-        try {
-            PreparedStatement results = conn.prepareStatement("SELECT * FROM " + PRODUCTS_TABLE + " WHERE " + PRODUCTS_ID + "=?");
-            results.setInt(1, getProductId(productName, productBrand, sId));
-            if (!results.executeQuery().next())
-                throw new SQLException("No Such Product Exists");
-            return results.executeQuery();
-        } catch (SQLException e) {
-            System.out.println("Couldn't fetch Product Details: " + e.getMessage());
-            return null;
-        }
     }
 }

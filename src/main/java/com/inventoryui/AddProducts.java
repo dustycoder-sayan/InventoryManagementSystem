@@ -2,21 +2,15 @@ package com.inventoryui;
 
 import com.inventory.DAO.SuppliersDAO;
 import com.inventory.DataSource.Admin;
-import com.inventory.database.ConnectionFactory;
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
@@ -24,8 +18,6 @@ import java.sql.SQLException;
 import java.text.ParseException;
 
 public class AddProducts {
-    // todo: if time permits, add label within the scene for "Add Product"
-    // todo: if time permits, add label within the scene for each textfield
     private final Connection conn;
     public AddProducts(Connection conn) {
         this.conn = conn;
@@ -34,7 +26,6 @@ public class AddProducts {
     public void start() {
         Stage primaryStage = new Stage();
 
-//        primaryStage.initModality(Modality.APPLICATION_MODAL);
         primaryStage.setTitle("Add Product");
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);

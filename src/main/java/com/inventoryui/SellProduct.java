@@ -1,22 +1,14 @@
 package com.inventoryui;
 
 import com.inventory.DAO.CustomerDAO;
-import com.inventory.DAO.IssueProductDAO;
 import com.inventory.DAO.ProductsDAO;
 import com.inventory.DAO.UsersDAO;
 import com.inventory.DTO.CustomerDTO;
-import com.inventory.DTO.IssueProductNamesDTO;
-import com.inventory.DTO.ProductsSupNameDTO;
-import com.inventory.DataSource.Admin;
 import com.inventory.DataSource.Seller;
-import com.inventory.database.ConnectionFactory;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;

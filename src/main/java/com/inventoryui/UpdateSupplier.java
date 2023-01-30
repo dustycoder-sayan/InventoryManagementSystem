@@ -2,29 +2,20 @@ package com.inventoryui;
 
 import com.inventory.DAO.SuppliersDAO;
 import com.inventory.DataSource.Admin;
-import com.inventory.database.ConnectionFactory;
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 public class UpdateSupplier {
-    // todo: if time permits, add label within the scene for "Add Product"
-    // todo: Cement oldPhone after retrieving from db
 
     private final Connection conn;
     public UpdateSupplier(Connection conn) {
@@ -33,7 +24,6 @@ public class UpdateSupplier {
 
     public void start() {
         Stage primaryStage = new Stage();
-//        primaryStage.initModality(Modality.APPLICATION_MODAL);
         primaryStage.setTitle("Update Supplier");
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);

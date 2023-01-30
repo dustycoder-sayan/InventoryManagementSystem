@@ -16,23 +16,6 @@ public class UsersDAO implements DatabaseConstants {
         this.conn = conn;
     }
 
-    public String getUsername(String uName, String uPhone) {
-        final String QUERY_USER = "SELECT "+USERS_USERNAME+" FROM "+USERS_TABLE+" WHERE "+USERS_NAME+"=? AND "
-                +USERS_PHONE+"=?";
-        try {
-            PreparedStatement queryUser = conn.prepareStatement(QUERY_USER);
-            queryUser.setString(1, uName);
-            queryUser.setString(2, uPhone);
-            ResultSet resultSet = queryUser.executeQuery();
-            if(resultSet == null)
-                throw new SQLException("Could not find User");
-            return resultSet.getString(1);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
-    }
-
     public String getUsername(int uId) {
         final String QUERY_USER = "SELECT "+USERS_USERNAME+" FROM "+USERS_TABLE+" WHERE "+USERS_ID+"=?";
         try {

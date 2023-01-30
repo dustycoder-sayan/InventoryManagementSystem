@@ -3,7 +3,6 @@ package com.inventoryui;
 import com.inventory.DTO.*;
 import com.inventory.DataSource.Admin;
 import com.inventory.DataSource.Seller;
-import com.inventory.database.ConnectionFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -26,7 +25,6 @@ public class SellerPage {
     private TreeView<String> tree;
     private String username;
     private Connection conn;
-    private TextField productName, brandName;
 
     public SellerPage(String username, Connection conn) {
         this.username = username;

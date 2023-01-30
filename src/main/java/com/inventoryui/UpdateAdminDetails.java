@@ -29,7 +29,6 @@ public class UpdateAdminDetails {
 
     public void start() {
         Stage primaryStage = new Stage();
-        //        primaryStage.initModality(Modality.APPLICATION_MODAL);
         primaryStage.setTitle("Update Details");
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);

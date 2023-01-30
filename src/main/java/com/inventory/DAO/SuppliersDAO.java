@@ -138,18 +138,4 @@ public class SuppliersDAO implements DatabaseConstants {
             return null;
         }
     }
-
-//    public ResultSet maxProductsSoldBySupplier() {
-//        final String MAX_PROD = "SELECT S.S_NAME, COUNT(P.S_ID)\n" +
-//                "FROM ISSUE_PRODUCT IP, PRODUCTS P, SUPPLIERS S\n" +
-//                "WHERE IP.P_ID = P.P_ID\n" +
-//                "AND P.S_ID = S.S_ID\n" +
-//                "GROUP BY P.S_ID;";
-//        try {
-//            PreparedStatement maxProd = conn.prepareStatement(MAX_PROD);
-//
-//        } catch (SQLException e) {
-//
-//        }
-//    }
 }
